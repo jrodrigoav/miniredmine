@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MiniRedmine.Web.Models.Redmine
+namespace MiniRedmine.Models.Redmine
 {
 
     public class TimeEntriesContainer

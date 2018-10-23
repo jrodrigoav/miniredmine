@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using MiniRedmine.Models.Redmine;
 using MiniRedmine.Web.Clients;
 using MiniRedmine.Web.Models;
-using MiniRedmine.Web.Models.Redmine;
 using MiniRedmine.Web.Services;
 using System;
 using System.Collections.Generic;

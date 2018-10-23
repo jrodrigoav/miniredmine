@@ -10,7 +10,6 @@ using MiniRedmine.Web.DbModels;
 using MiniRedmine.Web.Helpers;
 using MiniRedmine.Web.Services;
 using System;
-using System.Threading.Tasks;
 
 namespace MiniRedmine.Web
 {

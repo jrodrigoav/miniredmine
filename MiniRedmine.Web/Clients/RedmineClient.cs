@@ -1,5 +1,5 @@
+using MiniRedmine.Models.Redmine;
 using MiniRedmine.Web.Models;
-using MiniRedmine.Web.Models.Redmine;
 using System;
 using System.Net.Http;
 using System.Text;

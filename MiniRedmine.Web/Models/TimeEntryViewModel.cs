@@ -1,4 +1,4 @@
-﻿using MiniRedmine.Web.Models.Redmine;
+﻿using MiniRedmine.Models.Redmine;
 
 namespace MiniRedmine.Web.Models
 {

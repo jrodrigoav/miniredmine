@@ -1,4 +1,4 @@
-﻿namespace MiniRedmine.Web.Models.Redmine
+﻿namespace MiniRedmine.Models.Redmine
 {
     public class Activity
     {
