@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <Authors>Jesus Acedo</Authors>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <PublishDir>$(OutDir)_PublishedWebsites\NetCoreWebApp\</PublishDir>
   </PropertyGroup>
 
   <ItemGroup>
@@ -38,7 +39,7 @@
 
   <ItemGroup>
     <None Update="Database\templates.db">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>      
     </None>
   </ItemGroup>
 
