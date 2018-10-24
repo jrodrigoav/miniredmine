@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using MiniRedmine.Web.Helpers;
+using System.IO;
 
 namespace MiniRedmine.Web
 {
@@ -15,10 +16,11 @@ namespace MiniRedmine.Web
         public static IWebHost BuildWebHost(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)
+                .UseContentRoot(Directory.GetCurrentDirectory())
              .ConfigureAppConfiguration((hostingContext, config) =>
              {
                  var env = hostingContext.HostingEnvironment;
-                 config.SetBasePath(hostingContext.HostingEnvironment.ContentRootPath)
+                 config.SetBasePath(env.ContentRootPath)
                  .Add(new WebConfigSource() { Path = "web.config", Optional = false, ReloadOnChange = true })
                  .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                  .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
