@@ -16,18 +16,19 @@ namespace MiniRedmine.Web
 {
     public class Startup
     {
-        public static IConfiguration Configuration { get; private set; }
+        private readonly IConfiguration _configuration;
         private readonly IHostingEnvironment _env;
 
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
-            Configuration = configuration;
+            _configuration = configuration;
             _env = env;
         }
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(provider => _configuration);
             services.AddHttpClient<RedmineClient>(client =>
             {
                 client.BaseAddress = new Uri(Constants.REDMINE_APIURL);

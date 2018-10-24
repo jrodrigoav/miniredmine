@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using MiniRedmine.Models.Redmine;
 using MiniRedmine.Web.Clients;
 using MiniRedmine.Web.Models;
@@ -94,9 +95,9 @@ namespace MiniRedmine.Web.Controllers
         }
 
         [HttpGet("configurations")]
-        public IActionResult Configurations()
+        public IActionResult Configurations([FromServices]IConfiguration configuration)
         {
-            return Json(new { EnvVariables = Environment.GetEnvironmentVariables(), Configs = Startup.Configuration });
+            return Json(new { EnvVariables = Environment.GetEnvironmentVariables(), ASPCORE = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT",EnvironmentVariableTarget.User), Configs = configuration.GetSection("ConnectionStrings") });
         }
 
         private IEnumerable<TimeEntryViewModel> BuildTimeEntryRows(IEnumerable<TimeEntry> userEntries, IEnumerable<Activity> activities, IEnumerable<UserTemplateViewModel> templates)

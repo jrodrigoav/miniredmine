@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 
 namespace MiniRedmine.Web
 {
@@ -12,11 +11,7 @@ namespace MiniRedmine.Web
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-            .ConfigureAppConfiguration((hostingContext, config) =>
-            {
-                config.AddEnvironmentVariables();
-            })            
+            WebHost.CreateDefaultBuilder(args)            
             .UseStartup<Startup>()
             .Build();
     }
