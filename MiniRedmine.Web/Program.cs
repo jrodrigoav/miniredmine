@@ -16,16 +16,6 @@ namespace MiniRedmine.Web
         public static IWebHost BuildWebHost(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)
-                .UseContentRoot(Directory.GetCurrentDirectory())
-             .ConfigureAppConfiguration((hostingContext, config) =>
-             {
-                 var env = hostingContext.HostingEnvironment;
-                 config.SetBasePath(env.ContentRootPath)
-                 .Add(new WebConfigSource() { Path = "web.config", Optional = true, ReloadOnChange = true })
-                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                 .AddEnvironmentVariables();
-             })
             .UseStartup<Startup>()
             .Build();
         }
