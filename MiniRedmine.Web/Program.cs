@@ -12,7 +12,7 @@ namespace MiniRedmine.Web
             Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Warning()
             //.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-            .WriteTo.RollingFile("Logs\\MiniRedmine-{Date}.txt")
+            .WriteTo.RollingFile("App_Data\\MiniRedmine-{Date}.txt")
             .CreateLogger();
 
             try
