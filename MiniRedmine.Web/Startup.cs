@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.DotNet.PlatformAbstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +11,7 @@ using MiniRedmine.Web.DbModels;
 using MiniRedmine.Web.Helpers;
 using MiniRedmine.Web.Services;
 using System;
+using System.IO;
 
 namespace MiniRedmine.Web
 {
@@ -22,6 +24,8 @@ namespace MiniRedmine.Web
         {
             _configuration = configuration;
             _env = env;
+            string baseDir = ApplicationEnvironment.ApplicationBasePath;
+            AppDomain.CurrentDomain.SetData("DataDirectory", Path.Combine(baseDir, "App_Data"));
         }
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940

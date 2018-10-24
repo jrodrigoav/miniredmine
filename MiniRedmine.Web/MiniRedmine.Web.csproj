@@ -20,7 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Database\" />
     <Folder Include="Services\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
@@ -45,7 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Database\templates.db">
+    <None Update="App_Data\templates.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>      
     </None>
   </ItemGroup>
