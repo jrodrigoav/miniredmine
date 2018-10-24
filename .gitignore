@@ -337,3 +337,4 @@ ASALocalRun/
 wwwroot/
 /MiniRedmine.Web/package-lock.json
 /MiniRedmine.Web/Properties/launchSettings.json
+/MiniRedmine.Web/_PublishedWebsites/NetCoreWebApp
