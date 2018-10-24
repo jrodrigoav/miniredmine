@@ -35,7 +35,8 @@ namespace MiniRedmine.Web
 
             services.AddDbContext<RedmineUDB4Context>(options =>
             {
-                string connectionString = null;
+                options.UseInMemoryDatabase("MiniRedmineDB");
+                /*string connectionString = null;
                 if (_env.IsProduction())
                 {
                     connectionString = Environment.GetEnvironmentVariable("SQLSERVER_CONNECTION_STRING");
@@ -45,7 +46,7 @@ namespace MiniRedmine.Web
                 {
                     connectionString = Configuration.GetConnectionString("MiniRedmineDB");
                     options.UseSqlServer(connectionString);
-                }
+                }*/
                 
             });
 
