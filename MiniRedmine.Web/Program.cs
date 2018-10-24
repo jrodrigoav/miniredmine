@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using MiniRedmine.Web.Helpers;
-using System.IO;
 
 namespace MiniRedmine.Web
 {

@@ -1,9 +1,8 @@
+using MiniRedmine.Web.DbModels;
+using MiniRedmine.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using MiniRedmine.Web.DbModels;
-using MiniRedmine.Web.Models;
 
 namespace MiniRedmine.Web.Services
 {

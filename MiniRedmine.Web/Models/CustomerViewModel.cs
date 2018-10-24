@@ -1,5 +1,5 @@
-using System;
 using MiniRedmine.Web.DbModels;
+using System;
 
 namespace MiniRedmine.Web.Models
 {

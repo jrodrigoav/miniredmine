@@ -28,7 +28,7 @@ namespace MiniRedmine.Web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(provider => _configuration);
+            //services.AddSingleton(provider => _configuration);
             services.AddHttpClient<RedmineClient>(client =>
             {
                 client.BaseAddress = new Uri(Constants.REDMINE_APIURL);
@@ -36,19 +36,7 @@ namespace MiniRedmine.Web
 
             services.AddDbContext<RedmineUDB4Context>(options =>
             {
-                options.UseInMemoryDatabase("MiniRedmineDB");
-                /*string connectionString = null;
-                if (_env.IsProduction())
-                {
-                    connectionString = Environment.GetEnvironmentVariable("SQLSERVER_CONNECTION_STRING");
-                    options.UseInMemoryDatabase("MiniRedmineDB");
-                }
-                else
-                {
-                    connectionString = Configuration.GetConnectionString("MiniRedmineDB");
-                    options.UseSqlServer(connectionString);
-                }*/
-                
+                options.UseSqlServer(_configuration.GetConnectionString("MiniRedmineDB"));
             });
 
             services.AddScoped<UserTemplateService>();

@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using MiniRedmine.Models.Redmine;
 using MiniRedmine.Web.Clients;
 using MiniRedmine.Web.Models;
@@ -92,13 +91,7 @@ namespace MiniRedmine.Web.Controllers
             _userTemplateService.DeleteTemplate(templateId, int.Parse(userId));
 
             return NoContent();
-        }
-
-        [HttpGet("configurations")]
-        public IActionResult Configurations([FromServices]IConfiguration configuration)
-        {
-            return Json(new { Configs = configuration.GetConnectionString("MiniRedmineDB")});
-        }
+        }       
 
         private IEnumerable<TimeEntryViewModel> BuildTimeEntryRows(IEnumerable<TimeEntry> userEntries, IEnumerable<Activity> activities, IEnumerable<UserTemplateViewModel> templates)
         {
