@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 namespace MiniRedmine.Web.Clients
 {
     public class RedmineClient
-    {
-        //054ec0d4d33e09af643da08fefef6a9611a75efe
+    {        
         private readonly HttpClient _client;
 
         public RedmineClient(HttpClient client)
