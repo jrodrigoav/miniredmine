@@ -39,12 +39,14 @@ namespace MiniRedmine.Web
                 if (_env.IsProduction())
                 {
                     connectionString = Environment.GetEnvironmentVariable("SQLSERVER_CONNECTION_STRING");
+                    options.UseInMemoryDatabase("MiniRedmineDB");
                 }
                 else
                 {
                     connectionString = Configuration.GetConnectionString("MiniRedmineDB");
+                    options.UseSqlServer(connectionString);
                 }
-                options.UseSqlServer(connectionString);
+                
             });
 
             services.AddScoped<UserTemplateService>();
