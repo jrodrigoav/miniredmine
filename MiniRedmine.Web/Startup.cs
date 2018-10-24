@@ -35,7 +35,7 @@ namespace MiniRedmine.Web
 
             services.AddDbContext<RedmineUDB4Context>(options =>
             {
-                options.UseSqlServer(_configuration.GetConnectionString("MiniRedmineDB"));
+                options.UseSqlServer(Environment.GetEnvironmentVariable("SQLSERVER_CONNECTION_STRING") ?? _configuration .GetConnectionString("MiniRedmineDB"));
             });
 
             services.AddScoped<UserTemplateService>();
