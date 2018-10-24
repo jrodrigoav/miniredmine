@@ -22,7 +22,7 @@ namespace MiniRedmine.Web
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             _configuration = configuration;
-            _env = env;            
+            _env = env;
         }
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
@@ -35,7 +35,16 @@ namespace MiniRedmine.Web
 
             services.AddDbContext<RedmineUDB4Context>(options =>
             {
-                options.UseSqlServer(Environment.GetEnvironmentVariable("SQLSERVER_CONNECTION_STRING") ?? _configuration .GetConnectionString("MiniRedmineDB"));
+                string connectionString = null;
+                if (_env.IsProduction())
+                {
+                    connectionString = Environment.GetEnvironmentVariable("SQLSERVER_CONNECTION_STRING");
+                }
+                else
+                {
+                    connectionString = _configuration.GetConnectionString("MiniRedmineDB");
+                }
+                options.UseSqlServer(connectionString);
             });
 
             services.AddScoped<UserTemplateService>();
