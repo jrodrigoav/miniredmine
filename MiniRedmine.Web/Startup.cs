@@ -16,12 +16,12 @@ namespace MiniRedmine.Web
 {
     public class Startup
     {
-        private readonly IConfiguration _configuration;
+        public static IConfiguration Configuration { get; private set; }
         private readonly IHostingEnvironment _env;
 
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
-            _configuration = configuration;
+            Configuration = configuration;
             _env = env;
         }
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -42,7 +42,7 @@ namespace MiniRedmine.Web
                 }
                 else
                 {
-                    connectionString = _configuration.GetConnectionString("MiniRedmineDB");
+                    connectionString = Configuration.GetConnectionString("MiniRedmineDB");
                 }
                 options.UseSqlServer(connectionString);
             });

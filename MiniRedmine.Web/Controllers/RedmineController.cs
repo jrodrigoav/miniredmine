@@ -93,6 +93,12 @@ namespace MiniRedmine.Web.Controllers
             return NoContent();
         }
 
+        [HttpGet("configurations")]
+        public IActionResult Configurations()
+        {
+            return Json(new { EnvVariables = Environment.GetEnvironmentVariables(), Configs = Startup.Configuration });
+        }
+
         private IEnumerable<TimeEntryViewModel> BuildTimeEntryRows(IEnumerable<TimeEntry> userEntries, IEnumerable<Activity> activities, IEnumerable<UserTemplateViewModel> templates)
         {
             var currentDate = DateTime.Now.Date;
