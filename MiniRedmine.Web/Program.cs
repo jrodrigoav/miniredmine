@@ -21,8 +21,8 @@ namespace MiniRedmine.Web
              {
                  var env = hostingContext.HostingEnvironment;
                  config.SetBasePath(env.ContentRootPath)
-                 .Add(new WebConfigSource() { Path = "web.config", Optional = false, ReloadOnChange = true })
-                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                 .Add(new WebConfigSource() { Path = "web.config", Optional = true, ReloadOnChange = true })
+                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                  .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                  .AddEnvironmentVariables();
              })
