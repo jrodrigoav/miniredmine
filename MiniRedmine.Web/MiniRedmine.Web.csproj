@@ -4,14 +4,8 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <Authors>Jesus Acedo</Authors>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
-    <PublishDir>$(OutDir)_PublishedWebsites\NetCoreWebApp\</PublishDir>
-  </PropertyGroup>
-  <ItemDefinitionGroup>   
-    <PostBuildEvent>
-      <Command>npm run buildprod</Command>
-      <Message>Building scripts</Message>
-    </PostBuildEvent>
-  </ItemDefinitionGroup>
+    <PublishDir>$(OutDir)_PublishedWebsites\NetCoreWebApp\</PublishDir>    
+  </PropertyGroup>  
 
   <ItemGroup>
     <Compile Remove="_PublishedWebsites\**" />
