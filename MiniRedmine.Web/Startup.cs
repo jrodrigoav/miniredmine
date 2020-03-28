@@ -1,77 +1,60 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MiniRedmine.Web.Clients;
-using MiniRedmine.Web.DbModels;
-using MiniRedmine.Web.Helpers;
 using MiniRedmine.Web.Services;
-using System;
+using Serilog;
+using System.Collections.Generic;
 using System.IO;
 
 namespace MiniRedmine.Web
 {
     public class Startup
     {
-        private readonly IConfiguration _configuration;
-        private readonly IHostingEnvironment _env;
-
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        public IConfiguration Configuration { get; }
+        public Startup(IConfiguration configuration)
         {
-            _configuration = configuration;
-            _env = env;
+            Configuration = configuration;
         }
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddSingleton(provider => _configuration);
-            services.AddHttpClient<RedmineClient>(client =>
-            {
-                client.BaseAddress = new Uri(Constants.REDMINE_APIURL);
-            });
-
-            services.AddDbContext<RedmineUDB4Context>(options =>
-            {
-                options.UseSqlServer(_configuration.GetConnectionString("MiniRedmineDB"));
-            });
-
-            services.AddScoped<UserTemplateService>();
-            services.AddScoped<CustomerService>();
-
-            services.AddMvc();
+            services.AddHttpClient<RedmineHttpService>(configureClient => configureClient.BaseAddress=new System.Uri("https://dev.unosquare.com/redmine/"));
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseExceptionHandler(appBuilder =>
+            app.UseExceptionHandler("/api/Error/500");
+            app.UseStatusCodePagesWithReExecute("/api/Error/{0}");
+
+            app.UseSerilogRequestLogging();
+
+            app.UseDefaultFiles(new DefaultFilesOptions
             {
-                appBuilder.Run(async context =>
-                {
-                    context.Response.StatusCode = 500;
-                    var ex = context.Features.Get<IExceptionHandlerFeature>();
-                    if (ex != null)
-                    {
-                        await context.Response.WriteAsync($"Error [{ex.Error?.Message}]. Try again later.");
-                    }
-                    else
-                    {
-                        await context.Response.WriteAsync("An unexpected fault happened. Try again later.");
-                    }
-                });
+                DefaultFileNames = new List<string> { "index.html" }
             });
 
-            DefaultFilesOptions options = new DefaultFilesOptions();
-            options.DefaultFileNames.Clear();
-            options.DefaultFileNames.Add("index.html");
-
-            app.UseDefaultFiles(options);
             app.UseStaticFiles();
-            app.UseMvc();
+
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
+
+            app.Use(async (context, next) =>
+            {
+                await next();
+                var path = context.Request.Path.Value;
+
+                if (!path.StartsWith("/api") && !Path.HasExtension(path))
+                {
+                    context.Request.Path = "/index.html";
+                    await next();
+                }
+            });
+
         }
     }
 }
