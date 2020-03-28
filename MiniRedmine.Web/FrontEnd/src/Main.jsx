@@ -1,31 +1,24 @@
 ﻿import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
+import { TimeEntryActivitiesSelect } from './TimeEntryActivitiesSelect';
 
-export function Main(props) {
-    const [userApiToken, setUserApiToken] = useState('');
-
+export function Main(props) {    
     return (
         <Container fluid="true">
-            <Form.Row>
-                <Form.Group as={Col}>
-                    <InputGroup>
-                        <Form.Control type="text" placeholder="Redmine Api Token" defaultValue={props.userApiToken} onChange={e => setUserApiToken(e.target.value)} />
-                        <InputGroup.Append>
-                            <Button variant="primary" type="button" onClick={e => props.saveToken(e, userApiToken)}>Save Token</Button>
-                        </InputGroup.Append>
-                    </InputGroup>
-                </Form.Group>
-            </Form.Row>
             <Row>
                 <Col>
                     <pre>{JSON.stringify(props.userInfo, null, 2)}</pre>
+                    <Form>
+                        <Form.Group>
+                            <TimeEntryActivitiesSelect timeEntryActivities={props.timeEntryActivities} />
+                        </Form.Group>
+                    </Form>
                 </Col>
             </Row>
         </Container>
     );
 }
+

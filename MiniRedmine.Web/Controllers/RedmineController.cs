@@ -19,8 +19,16 @@ namespace MiniRedmine.Web.Controllers
         public async Task<IActionResult> UserInfoAsync([FromQuery]string userApiKey)
         {
             if (string.IsNullOrWhiteSpace(userApiKey)) return BadRequest(new { Message = "Try again" });
-            var result = await _redmineHttpService.GetCurrentUser(userApiKey);            
+            var result = await _redmineHttpService.GetCurrentUserAsync(userApiKey);
             return Ok(new CurrentUserViewModel(result));
+        }
+
+        [HttpGet("timeentryactivities")]
+        public async Task<IActionResult> TimeEntryActivitiesAsync([FromQuery]string userApiKey)
+        {
+            if (string.IsNullOrWhiteSpace(userApiKey)) return BadRequest(new { Message = "Try again" });
+            var result = await _redmineHttpService.GetTimeEntryActivitiesASync(userApiKey);
+            return Ok(result);
         }
     }
 }

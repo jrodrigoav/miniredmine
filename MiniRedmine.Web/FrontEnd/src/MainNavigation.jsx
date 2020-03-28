@@ -3,7 +3,10 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 
 export function MainNavigation(props) {
-    const userInfoNavText = props.userInfo ? <Navbar.Text>Hello {props.userInfo.firstName} {props.userInfo.lastName}</Navbar.Text> : <React.Fragment></React.Fragment>;
+    let userInfoNavText = <React.Fragment />;
+    if (props.userInfo !== {}) {
+        userInfoNavText = <Navbar.Text>Hello {props.userInfo.firstName} {props.userInfo.lastName}</Navbar.Text>;
+    }
     return (
         <Navbar bg="primary" className="mb-3">
             <Navbar.Brand href="#home">MiniRedmine 2</Navbar.Brand>
