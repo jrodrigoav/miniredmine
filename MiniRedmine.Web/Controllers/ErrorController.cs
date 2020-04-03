@@ -15,6 +15,7 @@ namespace MiniRedmine.Web.Controllers
         {
             _logger = logger;
         }
+
         [Route("500")]
         public IActionResult Error500()
         {
@@ -31,7 +32,7 @@ namespace MiniRedmine.Web.Controllers
                 };
             }
 
-            return Ok(result);
+            return StatusCode(500, result);
         }
 
         [Route("{statusCode}")]
@@ -58,7 +59,7 @@ namespace MiniRedmine.Web.Controllers
                     break;
             }
 
-            return Ok(result);
+            return StatusCode(statusCode, result);
         }
     }
 }

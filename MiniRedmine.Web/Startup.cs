@@ -20,7 +20,7 @@ namespace MiniRedmine.Web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHttpClient<RedmineHttpService>(configureClient => configureClient.BaseAddress=new System.Uri("https://dev.unosquare.com/redmine/"));
+            services.AddHttpClient<RedmineHttpService>(configureClient => configureClient.BaseAddress = new System.Uri("https://dev.unosquare.com/redmine/"));
             services.AddControllers();
         }
 
@@ -31,17 +31,6 @@ namespace MiniRedmine.Web
             app.UseStatusCodePagesWithReExecute("/api/Error/{0}");
 
             app.UseSerilogRequestLogging();
-
-            app.UseDefaultFiles(new DefaultFilesOptions
-            {
-                DefaultFileNames = new List<string> { "index.html" }
-            });
-
-            app.UseStaticFiles();
-
-            app.UseRouting();
-
-            app.UseEndpoints(endpoints => endpoints.MapControllers());
 
             app.Use(async (context, next) =>
             {
@@ -55,6 +44,15 @@ namespace MiniRedmine.Web
                 }
             });
 
+            app.UseDefaultFiles(new DefaultFilesOptions
+            {
+                DefaultFileNames = new List<string> { "index.html" }
+            });
+            app.UseStaticFiles();
+
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints => endpoints.MapControllers());            
         }
     }
 }

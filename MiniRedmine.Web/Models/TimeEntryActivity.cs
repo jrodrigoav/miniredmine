@@ -2,12 +2,8 @@
 
 namespace MiniRedmine.Web.Models
 {
-    public class TimeEntryActivity
+    public class TimeEntryActivity : TimeEntryElement
     {
-        [JsonPropertyName("id")]
-        public int Id { get; set; }
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
         [JsonPropertyName("is_default")]
         public bool IsDefault { get; set; }
     }

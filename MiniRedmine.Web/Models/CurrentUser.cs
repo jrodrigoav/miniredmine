@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 
 namespace MiniRedmine.Web.Models
-{
+{    
     public class CurrentUser
     {
         [JsonPropertyName("id")]

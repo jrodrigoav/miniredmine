@@ -2,21 +2,20 @@
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
+const miniredmine2Entry = path.resolve(__dirname, "../src", "Root.jsx");
+const indexHtml = path.resolve(__dirname, '../', 'index.html');
+const assetsSource = path.resolve(__dirname, "../src/assets");
+const distDirectory = path.resolve(__dirname, '../../wwwroot');
+
 module.exports = {
     entry: {
-        main: path.resolve(__dirname, "../src", "Root.jsx")
+        main: miniredmine2Entry
     },
     output: {
         filename: '[name].[hash].js',
-        path: path.resolve(__dirname, '../../wwwroot'),
+        path: distDirectory,
         publicPath: "/"
-    },
-    devServer: {
-        port: 3042,
-        historyApiFallback: true,
-        overlay: true,
-        open: true
-    },
+    },   
     module: {
         rules: [
             {
@@ -48,13 +47,13 @@ module.exports = {
             }
         ]
     },
-    plugins: [
+    plugins: [        
         new CopyWebpackPlugin([{
-            from: path.resolve(__dirname, "../src/assets"),
+            from: assetsSource,
             to: 'assets'
         }]),
         new HtmlWebPackPlugin({
-            template: path.resolve(__dirname, '../', 'index.html')
+            template: indexHtml
         })
     ],
     resolve: {

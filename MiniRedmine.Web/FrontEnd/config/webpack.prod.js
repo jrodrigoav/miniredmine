@@ -8,6 +8,10 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const enableBundleAnalyzer = process.env.ENABLE_ANALYZER === 'true';
+const miniredmine2Entry = path.resolve(__dirname, "../src", "Root.jsx");
+const indexHtml = path.resolve(__dirname, '../', 'index.html');
+const assetsSource = path.resolve(__dirname, "../src/assets");
+const distDirectory = path.resolve(__dirname, '../../wwwroot');
 
 module.exports = merge(common, {
     mode: 'production',
@@ -16,32 +20,29 @@ module.exports = merge(common, {
         rules: [
             {
                 test: /\.css$/,
-                use: [
-                    { loader: MiniCssExtractPlugin.loader },
-                    { loader: "css-loader" }
-                ]
+                use: [                    
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                        },
+                    },
+                    'css-loader',
+                ],
             },
-            {
-                test: /\.css$/,
-                use: [
-                    { loader: MiniCssExtractPlugin.loader },
-                    { loader: "css-loader" }
-                ]
-            }
         ]
     },
     optimization: {
         splitChunks: {
             chunks: 'all'
         },
-        runtimeChunk: false
+        runtimeChunk: true
     },
     plugins: [
         new CleanWebpackPlugin(),
         new OptimizeCssAssetsPlugin(),
         new MiniCssExtractPlugin({
             filename: "[name].[hash:8].css",
-            chunkFilename: "[id].[hash:8].css"
+            chunkFilename: "[id].[hash:8].css"            
         }),
         new ManifestPlugin(),
         new BundleAnalyzerPlugin({

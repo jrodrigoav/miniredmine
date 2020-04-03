@@ -2,25 +2,36 @@
   "author": "Rodrigo Acedo <jrodrigoav@gmail.com>",
   "babel": {
     "presets": [
-      "react"
+      "@babel/env",
+      "@babel/react"
+    ],
+    "plugins": [
+      [
+        "@babel/plugin-transform-runtime",
+        {
+          "regenerator": true
+        }
+      ]
     ]
   },
   "dependencies": {
     "axios": "0.19.2",
+    "moment": "2.24.0",
     "prop-types": "15.7.2",
     "react": "16.13.1",
     "react-bootstrap": "1.0.0",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "react-router-dom": "5.1.2"
   },
   "description": "MiniRedmine by JRAV",
   "devDependencies": {
     "@babel/cli": "7.8.4",
     "@babel/core": "7.9.0",
     "@babel/preset-env": "7.9.0",
+    "@babel/preset-react": "7.9.4",
     "@babel/runtime": "7.9.2",
+    "@babel/plugin-transform-runtime": "7.9.0",
     "babel-loader": "8.1.0",
-    "babel-preset-env": "1.7.0",
-    "babel-preset-react": "6.24.1",
     "clean-webpack-plugin": "3.0.0",
     "copy-webpack-plugin": "5.1.1",
     "css-loader": "3.4.2",
