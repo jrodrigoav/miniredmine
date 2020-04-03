@@ -1,10 +1,10 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace MiniRedmine.Web.Models
 {
     public class CreateTimeEntryResult
     {
-        [JsonPropertyName("time_entry")]
+        [JsonProperty("time_entry")]
         public TimeEntry TimeEntry { get; set; }
     }
 }

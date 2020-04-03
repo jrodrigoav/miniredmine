@@ -1,7 +1,7 @@
 ﻿using MiniRedmine.Web.Models;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace MiniRedmine.Web.Services
@@ -21,7 +21,7 @@ namespace MiniRedmine.Web.Services
             using (var response = await _httpClient.GetAsync("users/current.json"))
             {
                 response.EnsureSuccessStatusCode();
-                result = JsonSerializer.Deserialize<CurrentUserContainer>(await response.Content.ReadAsStringAsync())?.User;
+                result = JsonConvert.DeserializeObject<CurrentUserContainer>(await response.Content.ReadAsStringAsync())?.User;
             }
             return result;
         }
@@ -33,7 +33,7 @@ namespace MiniRedmine.Web.Services
             using (var response = await _httpClient.GetAsync("enumerations/time_entry_activities.json"))
             {
                 response.EnsureSuccessStatusCode();
-                result = JsonSerializer.Deserialize<TimeEntryActivitiesContainer>(await response.Content.ReadAsStringAsync())?.TimeEntryActivites;
+                result = JsonConvert.DeserializeObject<TimeEntryActivitiesContainer>(await response.Content.ReadAsStringAsync())?.TimeEntryActivites;
             }
             return result;
         }
@@ -45,7 +45,7 @@ namespace MiniRedmine.Web.Services
             using (var response = await _httpClient.GetAsync($"time_entries.json?limit=100&user_id={userId}&from={from}&to={to}"))
             {
                 response.EnsureSuccessStatusCode();
-                result = JsonSerializer.Deserialize<TimeEntriesContainer>(await response.Content.ReadAsStringAsync())?.TimeEntries;
+                result = JsonConvert.DeserializeObject<TimeEntriesContainer>(await response.Content.ReadAsStringAsync())?.TimeEntries;
             }
             return result;
         }
@@ -55,14 +55,16 @@ namespace MiniRedmine.Web.Services
             //_httpClient.DefaultRequestHeaders.Add(REDMINE_AUTH_HEADER, userApiKey);
             foreach (var entry in createTimeEntries)
             {
-                using var httpContent = CreateJsonHttpContent(entry);
-                using (var response = await _httpClient.PostAsync($"time_entries.json?key={userApiKey}", httpContent))
+                using (var httpContent = CreateJsonHttpContent(entry))
                 {
-                    response.EnsureSuccessStatusCode();
-                    var createTimeEntryResult = JsonSerializer.Deserialize<CreateTimeEntryResult>(await response.Content.ReadAsStringAsync());
-                    if (createTimeEntryResult is CreateTimeEntryResult)
+                    using (var response = await _httpClient.PostAsync($"time_entries.json?key={userApiKey}", httpContent))
                     {
-                        result.Add(createTimeEntryResult.TimeEntry);
+                        response.EnsureSuccessStatusCode();
+                        var createTimeEntryResult = JsonConvert.DeserializeObject<CreateTimeEntryResult>(await response.Content.ReadAsStringAsync());
+                        if (createTimeEntryResult is CreateTimeEntryResult)
+                        {
+                            result.Add(createTimeEntryResult.TimeEntry);
+                        }
                     }
                 }
             }

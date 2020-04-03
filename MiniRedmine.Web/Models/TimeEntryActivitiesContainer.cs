@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace MiniRedmine.Web.Models
 {
     public class TimeEntryActivitiesContainer
     {
-        [JsonPropertyName("time_entry_activities")]
+        [JsonProperty("time_entry_activities")]
         public IEnumerable<TimeEntryActivity> TimeEntryActivites { get; set; }
     }
 }

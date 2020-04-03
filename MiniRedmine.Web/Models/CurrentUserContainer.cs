@@ -1,10 +1,10 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace MiniRedmine.Web.Models
 {
     public class CurrentUserContainer
     {
-        [JsonPropertyName("user")]
+        [JsonProperty("user")]
         public CurrentUser User { get; set; }
     }
 }

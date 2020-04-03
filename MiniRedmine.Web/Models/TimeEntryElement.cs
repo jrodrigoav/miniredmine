@@ -1,12 +1,12 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace MiniRedmine.Web.Models
 {
     public abstract class TimeEntryElement
     {
-        [JsonPropertyName("id")]
+        [JsonProperty("id")]
         public int Id { get; set; }
-        [JsonPropertyName("name")]
+        [JsonProperty("name")]
         public string Name { get; set; }
     }
 }
