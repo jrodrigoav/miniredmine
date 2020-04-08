@@ -1,9 +1,9 @@
 ﻿import moment from 'moment';
 import React from 'react';
-import Form from 'react-bootstrap/Form';
-import TokenService from '../services/tokenService';
-import TimeEntryActivitiesSelect from './TimeEntryActivitiesSelect';
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import UserInfoService from '../services/UserInfoService';
+import TimeEntryActivitiesSelect from './TimeEntryActivitiesSelect';
 
 class NewTemplateForm extends React.Component {
     constructor(props) {
@@ -54,7 +54,7 @@ class NewTemplateForm extends React.Component {
                 <Form.Label>Comments</Form.Label>
                 <Form.Control type="text" name="Comments" onChange={this.handleChange} />
                 <Form.Label>Activity</Form.Label>
-                <TimeEntryActivitiesSelect name="ActivityId" timeEntryActivities={TokenService.getTimeEntryActivities()} onChange={this.handleChange} />
+                <TimeEntryActivitiesSelect name="ActivityId" timeEntryActivities={UserInfoService.getTimeEntryActivities()} onChange={this.handleChange} />
                 <Form.Label>Hours</Form.Label>
                 <Form.Control type="number" name="Hours" min="0" max="8" step="0.1" onChange={this.handleChange} />
                 <Button type="submit" variant="success">Save</Button>

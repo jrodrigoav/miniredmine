@@ -1,4 +1,5 @@
-﻿import filter from 'lodash/filter';
+﻿import axios from 'axios';
+import filter from 'lodash/filter';
 import sumBy from 'lodash/sumBy';
 import moment from 'moment';
 import React, { useState, useEffect } from 'react';
@@ -6,14 +7,14 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Table from 'react-bootstrap/Table';
-import TokenService from '../services/TokenService';
+import UserInfoService from '../services/UserInfoService';
 import '../styles/TimeEntries.css';
 
 
-const PersonalReport = (props) => {    
+const PersonalReport = (props) => {
     let datetime = new moment(), month = datetime.month();
-    const userInfo = TokenService.getUserInfo();
-    const [timeEntries, setTimeEntries] = useState([]);    
+    const userInfo = UserInfoService.getUserInfo();
+    const [timeEntries, setTimeEntries] = useState([]);
 
     useEffect(() => {
         let now = moment();
@@ -29,10 +30,10 @@ const PersonalReport = (props) => {
             fromLoad = moment().year(year).month(month).date(1).format('YYYY-MM-DD');
             toLoad = moment().year(year).month(month).date(15).format('YYYY-MM-DD');
         }
-        axios.get(`api/redmine/timeentries?userApiKey=${TokenService.getApiKey()}&userId=${userInfo.id}&from=${fromLoad}&to=${toLoad}`)
-            .then(success => setTimeEntries(success.data));            
+        axios.get(`api/redmine/timeentries?userApiKey=${UserInfoService.getApiKey()}&userId=${userInfo.id}&from=${fromLoad}&to=${toLoad}`)
+            .then(success => setTimeEntries(success.data));
     }, []);
-    
+
     datetime.startOf('month').startOf('week');
     var week = 0, i;
     let rows = [];
@@ -41,16 +42,13 @@ const PersonalReport = (props) => {
         for (i = 0; i < 7; i++) {
             const currentDate = datetime.format('YYYY-MM-DD');
             let day = <td key={i} className={month !== datetime.month() ? 'calendar-prior-months-date' : ''}>{datetime.format('D')}</td>;
-            if (props.from !== '' && props.to !== '') {
-                if (props.from <= currentDate && currentDate <= props.to) {
-                    day = <td key={i} className={month !== datetime.month() ? 'calendar-prior-months-date' : ''}>{datetime.format('D')}</td>;
-                    const dayItems = filter(timeEntries, { "spent_on": currentDate });
-                    const totalHours = sumBy(dayItems, 'hours');
-                    if (dayItems.length) {
-                        day = <td key={i} className={month !== datetime.month() ? 'calendar-prior-months-date' : ''}>{datetime.format('D')}<p>Tasks:{dayItems.length} Hours:{totalHours}</p></td>;
-                    }
-                }
+
+            const dayItems = filter(timeEntries, { "spent_on": currentDate });
+            const totalHours = sumBy(dayItems, 'hours');
+            if (dayItems.length) {
+                day = <td key={i} className={month !== datetime.month() ? 'calendar-prior-months-date' : ''}>{datetime.format('D')}<p>Tasks:{dayItems.length} Hours:{totalHours}</p></td>;
             }
+
             days.push(day);
             datetime.add(1, 'day');
         }
@@ -62,6 +60,7 @@ const PersonalReport = (props) => {
         <Container>
             <Row>
                 <Col>
+                    <h5>Total Hours: {sumBy(timeEntries, 'hours')}</h5>
                     <Table striped bordered hover>
                         <thead>
                             <tr className="calendar-month-header-row">

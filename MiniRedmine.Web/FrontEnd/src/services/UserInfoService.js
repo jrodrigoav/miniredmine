@@ -1,8 +1,9 @@
-﻿import moment from 'moment';
-import find from 'lodash/find';
+﻿import find from 'lodash/find';
+import moment from 'moment';
 const STORAGE_API_KEY = 'RedmineApiToken';
 const TEMPLATES_STORAGE_KEY = 'MiniRedmineTemplates';
-const TokenService = {
+
+const UserInfoService = {
     isAuthenticated: false,
     _userInfo: {},
     _timeEntryActivities: [],
@@ -52,4 +53,4 @@ const TokenService = {
     }
 };
 
-export default TokenService;
+export default UserInfoService;

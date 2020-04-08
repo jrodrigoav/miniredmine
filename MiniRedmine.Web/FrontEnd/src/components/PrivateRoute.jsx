@@ -1,13 +1,13 @@
 ﻿import React from "react";
 import { Redirect, Route } from "react-router-dom";
-import TokenService from "../services/tokenService";
+import UserInfoService from "../services/UserInfoService";
 
 function PrivateRoute({ children, ...rest }) {
     return (
         <Route
             {...rest}
             render={({ location }) =>
-                TokenService.isAuthenticated ? (
+                UserInfoService.isAuthenticated ? (
                     children
                 ) : (
                         <Redirect

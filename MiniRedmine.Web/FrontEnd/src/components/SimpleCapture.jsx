@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Row from 'react-bootstrap/Row';
-import TokenService from '../services/tokenService';
+import UserInfoService from '../services/UserInfoService';
 import SimpleCaptureItem from './SimpleCaptureItem';
 
 function SimpleCapture() {
@@ -19,17 +19,17 @@ function SimpleCapture() {
     const day = now.date();
     const minDate = day >= 16 ? moment().year(year).month(month).date(16).format('YYYY-MM-DD') : moment().year(year).month(month).date(1).format('YYYY-MM-DD');
     const maxDate = day >= 16 ? moment().year(year).month(month).date(1).add(1, 'months').subtract(1, 'days').format('YYYY-MM-DD') : moment().year(year).month(month).date(15).format('YYYY-MM-DD');
-    const dateItems = TokenService.getDateArray(minDate, maxDate);
-    const userTemplates = TokenService.getUserTemplates();
+    const dateItems = UserInfoService.getDateArray(minDate, maxDate);
+    const userTemplates = UserInfoService.getUserTemplates();
     useEffect(() => {
-        const userInfo = TokenService.getUserInfo();
-        axios.get(`api/redmine/timeentries?userApiKey=${TokenService.getApiKey()}&userId=${userInfo.id}&from=${minDate}&to=${maxDate}`)
+        const userInfo = UserInfoService.getUserInfo();
+        axios.get(`api/redmine/timeentries?userApiKey=${UserInfoService.getApiKey()}&userId=${userInfo.id}&from=${minDate}&to=${maxDate}`)
             .then(success => setTimeEntries(success.data));
     }, []);
 
     function saveTimeEntries(spentOn, newTimeEntries)
     {
-        axios.post(`api/redmine/timeentries?userApiKey=${TokenService.getApiKey()}&spentOn=${spentOn}`, newTimeEntries)
+        axios.post(`api/redmine/timeentries?userApiKey=${UserInfoService.getApiKey()}&spentOn=${spentOn}`, newTimeEntries)
             .then(success => {                
                 let newEntries = timeEntries.concat(success.data);                
                 setTimeEntries(newEntries);                

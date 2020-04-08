@@ -6,10 +6,10 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Container from 'react-bootstrap/Container';
-import TokenService from '../services/tokenService';
+import UserInfoService from '../services/UserInfoService';
 
 function Login() {
-    const [userApiToken, setUserApiToken] = useState(TokenService.getApiKey());
+    const [userApiToken, setUserApiToken] = useState(UserInfoService.getApiKey());
     let history = useHistory();
     let location = useLocation();
     let { from } = location.state || { from: { pathname: "/" } };    
@@ -20,7 +20,7 @@ function Login() {
         if (userApiToken !== '') {
             let userResponse = await axios.get(`api/redmine/userinfo?userApiKey=${userApiToken}`);
             let activitiesResponse = await axios.get(`api/redmine/timeentryactivities?userApiKey=${userApiToken}`);            
-            TokenService.signIn(userApiToken, userResponse.data, activitiesResponse.data);
+            UserInfoService.signIn(userApiToken, userResponse.data, activitiesResponse.data);
             loginCallBack();
         }
     }

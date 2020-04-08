@@ -3,10 +3,10 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import ListGroupItem from 'react-bootstrap/ListGroupItem';
-import TokenService from '../services/tokenService';
+import UserInfoService from '../services/UserInfoService';
 
 function SimpleCaptureItemUserForm({ entry, removeTask, handleChange }) {
-    const timeEntryActivities = TokenService.getTimeEntryActivities();
+    const timeEntryActivities = UserInfoService.getTimeEntryActivities();
     const selectOptions = timeEntryActivities.map((item, index) => <option key={index} value={item.id}>{item.name}</option>);
     return (
         <ListGroupItem>

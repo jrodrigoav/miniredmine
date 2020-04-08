@@ -1,7 +1,6 @@
 ﻿import concat from 'lodash/concat';
 import moment from 'moment';
-import React, { useState, useEffect } from 'react';
-
+import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Col from 'react-bootstrap/Col';
@@ -9,6 +8,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import ListGroupItem from 'react-bootstrap/ListGroupItem';
 import Row from 'react-bootstrap/Row';
 import SimpleCaptureItemUserForm from './SimpleCaptureItemUserForm';
+
 
 
 function SimpleCaptureItem({ now, dateItem, userTimeEntries, userTemplates, saveTimeEntries }) {

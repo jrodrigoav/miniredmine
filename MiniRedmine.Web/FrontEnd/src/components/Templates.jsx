@@ -8,13 +8,13 @@ import Container from 'react-bootstrap/Container';
 import ListGroup from 'react-bootstrap/ListGroup';
 import ListGroupItem from 'react-bootstrap/ListGroupItem';
 import Row from 'react-bootstrap/Row';
-import TokenService from '../services/tokenService';
+import UserInfoService from '../services/UserInfoService';
 import NewTemplateForm from './NewTemplateForm';
 
 function Templates() {
     const TEMPLATES_STORAGE_KEY = 'MiniRedmineTemplates';
     const [templates, setTemplates] = useState(JSON.parse(localStorage.getItem(TEMPLATES_STORAGE_KEY) || '[]'));
-    const templateItems = templates.map((item, index) => <ListGroupItem key={item.Id}>{item.IssueId} | {TokenService.getTimeEntryActivityById(item.ActivityId).name} |{item.Comments} | {item.Hours} | <Button type="button" variant="danger" onClick={() => deleteTemplate(index)}><i className="fas fa-trash"></i></Button></ListGroupItem>);
+    const templateItems = templates.map((item, index) => <ListGroupItem key={item.Id}>{item.IssueId} | {UserInfoService.getTimeEntryActivityById(item.ActivityId).name} |{item.Comments} | {item.Hours} | <Button type="button" variant="danger" onClick={() => deleteTemplate(index)}><i className="fas fa-trash"></i></Button></ListGroupItem>);
     const totalHours = sumBy(templates, (itm) => new Number(itm.Hours)).toString();
 
     function addTemplate(newTemplate) {

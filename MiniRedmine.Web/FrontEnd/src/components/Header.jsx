@@ -2,13 +2,13 @@
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { useHistory } from 'react-router-dom';
-import TokenService from '../services/tokenService';
+import UserInfoService from '../services/UserInfoService';
 
 function Header() {
     let history = useHistory();
     let userInfoNavText = <React.Fragment />;
-    if (TokenService.isAuthenticated) {
-        const userInfo = TokenService.getUserInfo();
+    if (UserInfoService.isAuthenticated) {
+        const userInfo = UserInfoService.getUserInfo();
         userInfoNavText = <Navbar.Text>Hello {userInfo.firstName} {userInfo.lastName}</Navbar.Text>;
     }
     return (
