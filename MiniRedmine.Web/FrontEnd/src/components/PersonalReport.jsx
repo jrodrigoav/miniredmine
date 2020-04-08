@@ -1,14 +1,14 @@
 ﻿import filter from 'lodash/filter';
 import sumBy from 'lodash/sumBy';
 import moment from 'moment';
-import React from 'react';
+import React, { useState } from 'react';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Table from 'react-bootstrap/Table';
-
 import TokenService from '../services/TokenService';
 import '../styles/TimeEntries.css';
+
 
 const PersonalReport = (props) => {    
     let datetime = new moment(), month = datetime.month();
