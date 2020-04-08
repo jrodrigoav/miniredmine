@@ -2,11 +2,11 @@
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import Main from './components/Main';
-import MainNavigation from './components/MainNavigation';
+import Header from './components/Header';
 
 const Root = () => (
     <BrowserRouter>
-        <MainNavigation />
+        <Header />
         <Main />
     </BrowserRouter>
 );

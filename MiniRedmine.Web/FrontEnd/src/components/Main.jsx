@@ -1,11 +1,10 @@
 ﻿import React from 'react';
-import { Switch, Route } from 'react-router-dom';
-import PrivateRoute from './PrivateRoute';
+import { Route, Switch } from 'react-router-dom';
 import Home from './Home';
-import TimeEntries from './TimeEntries';
 import Login from './Login';
-import Templates from './Templates';
+import PrivateRoute from './PrivateRoute';
 import SimpleCapture from './SimpleCapture';
+import Templates from './Templates';
 
 const Main = () => (
     <Switch>
@@ -17,10 +16,7 @@ const Main = () => (
         </PrivateRoute>
         <PrivateRoute path="/SimpleCapture">
             <SimpleCapture />
-        </PrivateRoute>
-        <PrivateRoute exact path="/TimeEntries">
-            <TimeEntries />
-        </PrivateRoute>
+        </PrivateRoute>        
         <PrivateRoute path="/Templates">
             <Templates />
         </PrivateRoute>
