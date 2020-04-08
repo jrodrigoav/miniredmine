@@ -22,6 +22,9 @@ function Header() {
                 <Nav className="mr-auto">
                     <Nav.Link onClick={() => history.push("/Templates")}>Templates</Nav.Link>
                 </Nav>
+                <Nav className="mr-auto">
+                    <Nav.Link onClick={() => history.push("/PersonalReport")}>Personal Report</Nav.Link>
+                </Nav>
             </Navbar.Collapse>
             {userInfoNavText}
         </Navbar>

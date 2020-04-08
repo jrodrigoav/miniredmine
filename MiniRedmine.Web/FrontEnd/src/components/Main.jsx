@@ -1,5 +1,6 @@
 ﻿import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import PersonalReport from './PersonalReport';
 import Home from './Home';
 import Login from './Login';
 import PrivateRoute from './PrivateRoute';
@@ -19,6 +20,9 @@ const Main = () => (
         </PrivateRoute>        
         <PrivateRoute path="/Templates">
             <Templates />
+        </PrivateRoute>
+        <PrivateRoute path="/PersonalReport">
+            <PersonalReport />
         </PrivateRoute>
     </Switch>
 );
