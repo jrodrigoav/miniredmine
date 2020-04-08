@@ -4,7 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import { useHistory } from 'react-router-dom';
 import TokenService from '../services/tokenService';
 
-function MainNavigation() {
+function Header() {
     let history = useHistory();
     let userInfoNavText = <React.Fragment />;
     if (TokenService.isAuthenticated) {
@@ -18,10 +18,7 @@ function MainNavigation() {
             <Navbar.Collapse id="main-navbar-nav">
                 <Nav className="mr-auto">
                     <Nav.Link onClick={() => history.push("/SimpleCapture")}>Simple Capture</Nav.Link>
-                </Nav>
-                <Nav className="mr-auto">
-                    <Nav.Link onClick={() => history.push("/TimeEntries")}>TimeEntries</Nav.Link>
-                </Nav>
+                </Nav>                
                 <Nav className="mr-auto">
                     <Nav.Link onClick={() => history.push("/Templates")}>Templates</Nav.Link>
                 </Nav>
@@ -31,4 +28,4 @@ function MainNavigation() {
     );
 }
 
-export default MainNavigation;
+export default Header;

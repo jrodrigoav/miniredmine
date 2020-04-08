@@ -94,11 +94,10 @@ function SimpleCaptureItem({ now, dateItem, userTimeEntries, userTemplates, save
             </Col>
         );
     }
-
+    const itemVariant = dateItem.day() === 6 || dateItem.day() === 0 ? 'danger' : 'primary';
     return (
-        <ListGroupItem>
+        <ListGroupItem variant={itemVariant}>
             <h6>{dateItem.format('dddd')}&nbsp;<small>{dateItem.format('YYYY-MM-DD')}</small></h6>
-
             <Row>
                 <Col xs={10}>
                     <ListGroup>
