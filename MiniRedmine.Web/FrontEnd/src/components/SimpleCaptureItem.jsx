@@ -15,9 +15,7 @@ function SimpleCaptureItem({ now, dateItem, userTimeEntries, userTemplates, save
     const [tasks, setTasks] = useState([]);
 
     useEffect(() => {
-        if (userTimeEntries.length > 0) {
-            console.log('From Item');
-            console.log(userTimeEntries);
+        if (userTimeEntries.length > 0) {            
             setTasks([{ Id: moment().unix(), IssueId: 0, ActivityId: -1, Hours: 1, Comments: 'Comments' }]);
         }
         else {

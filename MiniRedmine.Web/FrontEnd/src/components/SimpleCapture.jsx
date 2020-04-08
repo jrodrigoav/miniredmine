@@ -30,10 +30,8 @@ function SimpleCapture() {
     function saveTimeEntries(spentOn, newTimeEntries)
     {
         axios.post(`api/redmine/timeentries?userApiKey=${TokenService.getApiKey()}&spentOn=${spentOn}`, newTimeEntries)
-            .then(success => {
-                console.log(timeEntries);
-                let newEntries = timeEntries.concat(success.data);
-                console.log(newEntries);
+            .then(success => {                
+                let newEntries = timeEntries.concat(success.data);                
                 setTimeEntries(newEntries);                
             }, error => { setShowAlert({ error: error.response.data, show: true }); });
     }
