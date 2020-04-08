@@ -6,6 +6,8 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Table from 'react-bootstrap/Table';
+
+import TokenService from '../services/TokenService';
 import '../styles/TimeEntries.css';
 
 const PersonalReport = (props) => {    
