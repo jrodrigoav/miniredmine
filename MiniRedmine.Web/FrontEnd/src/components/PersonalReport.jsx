@@ -1,7 +1,7 @@
 ﻿import filter from 'lodash/filter';
 import sumBy from 'lodash/sumBy';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
