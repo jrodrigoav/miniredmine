@@ -72,7 +72,7 @@
         `api/redmine/timeentryactivities?userApiKey=${$user.api_key}`
       );
       const tempActivities = await res.json();
-      activities.updateActivties(tempActivities);
+      activities.updateActivities(tempActivities);
     }
   });
 </script>
