@@ -55,21 +55,31 @@
       </form>
     </div>
     <div class="col">
-      {#each $issues as issue (issue.id)}
-        <p>
-          {issue.id} {issue.subject}
-          <button
-            type="button"
-            class="btn btn-sm btn-danger"
-            on:click={(e) => handleRemove(e, issue.id)}>
-            <i class="fas fa-trash" />
-          </button>
-        </p>
-      {/each}
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Issue</th>
+            <th>Subject</th>
+            <th />
+          </tr>
+        </thead>
+        <tbody>
+          {#each $issues as issue (issue.id)}
+            <tr>
+              <td>{issue.id}</td>
+              <td>{issue.subject}</td>
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-danger"
+                  on:click={(e) => handleRemove(e, issue.id)}>
+                  <i class="fas fa-trash" />
+                </button>
+              </td>
+            </tr>
+          {/each}
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
-<!--
-    [{"activityId":"50","issueId":"50283","hours":5,"comments":"Production Support"},{"activityId":"10","issueId":"50283","hours":0.5,"comments":"Daily Standup"},{"activityId":"9","issueId":"50283","hours":2.5,"comments":"Production Support Tools"}]
-    [{"id":50283,"subject":"Project Activities - Jesus Acedo","project":{"id":409,"name":"Axos Bank - IT Operations - Production Support"},"assigned_to":{"id":627,"name":"Jesus Acedo"}},{"id":33651,"subject":".NET Interviews","project":{"id":46,"name":"Unosquare - Assessments "},"assigned_to":null}]
--->

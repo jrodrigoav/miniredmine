@@ -32,6 +32,10 @@
   }
 
   let currentRoute = "/"; 
+
+  onMount(()=>{
+    routeHandler(null,window.location.pathname);
+  });
 </script>
 
 <Header handleNavigation={routeHandler} />

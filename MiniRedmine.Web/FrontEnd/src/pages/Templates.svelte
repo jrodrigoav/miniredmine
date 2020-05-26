@@ -1,4 +1,6 @@
 <script>
+  import { onMount } from "svelte";
+  import { user } from "../stores/userstore";
   import { issues } from "../stores/issuestore";
   import { templates } from "../stores/templatestore";
   import { activities } from "../stores/activitystore";
@@ -63,6 +65,16 @@
   }
 
   let newtemplate = initTemplate();
+
+  onMount(async () => {
+    if ($user.unauthorized === undefined && $activities.length === 0) {
+      const res = await fetch(
+        `api/redmine/timeentryactivities?userApiKey=${internaluser.api_key}`
+      );
+      const tempActivities = await res.json();
+      activities.updateActivties(tempActivities);
+    }
+  });
 </script>
 
 <div class="container">
