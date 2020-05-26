@@ -1,6 +1,6 @@
 ﻿<script>
   export let handleNavigation;
-  export let applicationState = {};
+  import { user } from "../stores/userstore";
 </script>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-3">
@@ -19,7 +19,7 @@
   </button>
   <div class="collapse navbar-collapse" id="mainnavbar">
     <ul class="navbar-nav mr-auto">
-      {#if applicationState.isRegistered === false}
+      {#if $user.unauthorized === true}
         <li class="nav-item">
           <a
             class="nav-link"

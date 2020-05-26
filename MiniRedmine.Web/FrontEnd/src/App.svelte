@@ -2,13 +2,11 @@
   import { onMount } from "svelte";
   import Header from "./components/Header";
   import Main from "./components/Main";
-
-  import StorageService from "./services/StorageService";
+  
   function routeHandler(event, route) {
     event ? event.preventDefault() : () => {};
     window.history.replaceState(null, routeTranslator(route), route);
-    currentRoute = route;
-    applicationState = StorageService.appState;
+    currentRoute = route;    
   }
 
   function routeTranslator(route) {
@@ -33,14 +31,8 @@
     return result;
   }
 
-  let currentRoute = "/";
-  $: applicationState = {};
-
-  onMount(async () => {
-    await StorageService.init();
-    applicationState = StorageService.appState;
-  });
+  let currentRoute = "/"; 
 </script>
 
-<Header handleNavigation={routeHandler} {applicationState} />
-<Main handleNavigation={routeHandler} {currentRoute} {applicationState} />
+<Header handleNavigation={routeHandler} />
+<Main handleNavigation={routeHandler} {currentRoute}/>

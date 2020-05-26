@@ -55,53 +55,9 @@ namespace MiniRedmine.Web.Controllers
         }
 
         [HttpPost("timeentries")]
-        public async Task<IActionResult> CreateTimeEntriesAsync([FromQuery] string userApiKey, [FromQuery] string spentOn, [FromBody] IEnumerable<CreateTimeEntryViewModel> newTimeEntries)
+        public async Task<IActionResult> CreateTimeEntriesAsync([FromQuery] string userApiKey, [FromBody]CreateTimeEntryViewModel newTimeEntry)
         {
-            if (IsValidTimeEntries(userApiKey, spentOn, newTimeEntries, out List<CreateTimeEntryContainer> createTimeEntries))
-            {
-                await _redmineHttpService.GetTimeEntryActivitiesASync(userApiKey);
-                return Ok(await _redmineHttpService.CreateTimeEntriesAsync(userApiKey, createTimeEntries));
-                //return Ok(new List<TimeEntry> { new TimeEntry { Id = DateTime.Now.Millisecond, Comments = "Created", SpentOn = spentOn, Activity = new TimeEntryActivity { Id = 50 }, Issue = new TimeEntryIssue { Id = 50283 } } });
-            }
-            return BadRequest(ModelState);
-        }
-
-        private bool IsValidTimeEntries(string userApiKey, string spentOn, IEnumerable<CreateTimeEntryViewModel> newTimeEntries, out List<CreateTimeEntryContainer> createTimeEntries)
-        {
-            bool result = false;
-            if (!string.IsNullOrWhiteSpace(userApiKey) && !string.IsNullOrWhiteSpace(spentOn) && ModelState.IsValid)
-            {
-                createTimeEntries = new List<CreateTimeEntryContainer>();
-                try
-                {
-                    foreach (var entry in newTimeEntries)
-                    {
-
-                        var createEntry = new CreateTimeEntryContainer
-                        {
-                            TimeEntry = new CreateTimeEntry
-                            {
-                                IssueId = entry.IssueId,
-                                ActivityId = entry.ActivityId,
-                                SpentOn = spentOn,
-                                Hours = entry.Hours,
-                                Comments = entry.Comments
-                            }
-                        };
-                        createTimeEntries.Add(createEntry);
-                    }
-                    result = true;
-
-                }
-                catch (FormatException) { ModelState.AddModelError("", "Try Again"); }
-                catch (OverflowException) { ModelState.AddModelError("", "Try Again"); }
-            }
-            else
-            {
-                ModelState.AddModelError("", "Try Again");
-                createTimeEntries = null;
-            }
-            return result;
+            return Created("", await _redmineHttpService.CreateTimeEntriesAsync(userApiKey, newTimeEntry.ConvertToCreateTimeEntry()));
         }
     }
 }

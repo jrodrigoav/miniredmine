@@ -1,28 +1,36 @@
 <script>
-  import axios from "axios";
-  import StorageService from "../services/StorageService";
-
-  export let applicationState = {};
+  import { issues } from "../stores/issuestore";
+  import { templates } from "../stores/templatestore";
+  import { activities } from "../stores/activitystore";
 
   function handleSubmit(event) {
     event.preventDefault();
-    newtemplate.id = templates.length;
-    templates.push(newtemplate);
-    StorageService.storeTemplates(templates);
-    templates = templates;
+    let tempTemplates = Array.from($templates);
+    tempTemplates.push(newtemplate);
+    templates.updateTemplates(tempTemplates);
     newtemplate = initTemplate();
   }
 
-  function handleRemove(event, index) {
+  function handleRemove(event, id) {
     event.preventDefault();
-    templates.splice(index, 1);
-    StorageService.storeTemplates(templates);
-    templates = templates;
+    let deleteIndex = -1;
+    let tempTemplates = Array.from($templates);
+    for (let index = 0; index < tempTemplates.length; index++) {
+      const element = tempTemplates[index];
+      if (element.id === id) {
+        deleteIndex = index;
+      }
+    }
+    if (deleteIndex >= 0) {
+      tempTemplates.splice(deleteIndex, 1);
+      templates.updateTemplates(tempTemplates);
+    }
   }
 
   function initTemplate() {
+    const now = new Date();
     return {
-      id: templates.length,
+      id: `${now.getFullYear()}${now.getMonth()}${now.getDay()}${now.getHours()}${now.getMinutes()}${now.getSeconds()}${now.getMilliseconds()}`,
       issue: "",
       activity: "",
       comments: "",
@@ -32,8 +40,8 @@
 
   function translateActivity(activity) {
     let result = "";
-    for (let index = 0; index < applicationState.activities.length; index++) {
-      const element = applicationState.activities[index];
+    for (let index = 0; index < $activities.length; index++) {
+      const element = $activities[index];
       if (element.id === activity) {
         result = element.name;
         break;
@@ -44,8 +52,8 @@
 
   function translateIssue(issue) {
     let result = "";
-    for (let index = 0; index < applicationState.issues.length; index++) {
-      const element = applicationState.issues[index];
+    for (let index = 0; index < $issues.length; index++) {
+      const element = $issues[index];
       if (element.id === issue) {
         result = element.subject;
         break;
@@ -54,8 +62,7 @@
     return result;
   }
 
-  let newtemplate = {};
-  $: templates = applicationState.templates;
+  let newtemplate = initTemplate();
 </script>
 
 <div class="container">
@@ -69,7 +76,7 @@
             class="form-control"
             name="Issue">
             <option value="" selected>--Select an issue--</option>
-            {#each applicationState.issues as issue (issue.id)}
+            {#each $issues as issue (issue.id)}
               <option value={issue.id}>{issue.subject}</option>
             {/each}
           </select>
@@ -81,7 +88,7 @@
             class="form-control"
             name="Activity">
             <option value="" selected>--Select an activity--</option>
-            {#each applicationState.activities as activity (activity.id)}
+            {#each $activities as activity (activity.id)}
               <option value={activity.id}>{activity.name}</option>
             {/each}
           </select>
@@ -112,7 +119,11 @@
     </div>
     <div class="col">
       <table class="table table-striped">
-        <caption><p class="text-info">Total Hours: {templates.reduce((a,b) => a + Number.parseFloat(b.hours),0)}</p></caption>
+        <caption>
+          <p class="text-info">
+            Total Hours: {$templates.reduce((a, b) => a + Number.parseFloat(b.hours), 0)}
+          </p>
+        </caption>
         <thead>
           <tr>
             <th>Issue</th>
@@ -123,7 +134,7 @@
           </tr>
         </thead>
         <tbody>
-          {#each templates as template (template.id)}
+          {#each $templates as template (template.id)}
             <tr>
               <td>{translateIssue(template.issue)}</td>
               <td>{translateActivity(template.activity)}</td>
@@ -144,7 +155,3 @@
     </div>
   </div>
 </div>
-<!--
-    [{"activityId":"50","issueId":"50283","hours":5,"comments":"Production Support"},{"activityId":"10","issueId":"50283","hours":0.5,"comments":"Daily Standup"},{"activityId":"9","issueId":"50283","hours":2.5,"comments":"Production Support Tools"}]
-    [{"id":50283,"subject":"Project Activities - Jesus Acedo","project":{"id":409,"name":"Axos Bank - IT Operations - Production Support"},"assigned_to":{"id":627,"name":"Jesus Acedo"}},{"id":33651,"subject":".NET Interviews","project":{"id":46,"name":"Unosquare - Assessments "},"assigned_to":null}]
--->

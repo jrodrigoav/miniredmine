@@ -26,7 +26,7 @@ namespace MiniRedmine.Web.Services
             return result;
         }
 
-        public async Task<Issue> GetIssueAsync(string userApiKey,int issueId)
+        public async Task<Issue> GetIssueAsync(string userApiKey, int issueId)
         {
             Issue result = null;
             _httpClient.DefaultRequestHeaders.Add(REDMINE_AUTH_HEADER, userApiKey);
@@ -61,22 +61,23 @@ namespace MiniRedmine.Web.Services
             }
             return result;
         }
-        public async Task<IEnumerable<TimeEntry>> CreateTimeEntriesAsync(string userApiKey, List<CreateTimeEntryContainer> createTimeEntries)
+
+        public Task<TimeEntry> CreateTimeEntriesAsync(string userApiKey, CreateTimeEntry createTimeEntryViewModel)
         {
-            var result = new List<TimeEntry>();
-            //_httpClient.DefaultRequestHeaders.Add(REDMINE_AUTH_HEADER, userApiKey);
-            foreach (var entry in createTimeEntries)
+            return CreateTimeEntriesAsync(userApiKey, new CreateTimeEntryContainer { TimeEntry = createTimeEntryViewModel });
+        }
+        public async Task<TimeEntry> CreateTimeEntriesAsync(string userApiKey, CreateTimeEntryContainer createTimeEntryContainer)
+        {
+            TimeEntry result = null;
+            using (var httpContent = CreateJsonHttpContent(createTimeEntryContainer))
             {
-                using (var httpContent = CreateJsonHttpContent(entry))
+                using (var response = await _httpClient.PostAsync($"time_entries.json?key={userApiKey}", httpContent))
                 {
-                    using (var response = await _httpClient.PostAsync($"time_entries.json?key={userApiKey}", httpContent))
+                    response.EnsureSuccessStatusCode();
+                    var createTimeEntryResult = JsonConvert.DeserializeObject<CreateTimeEntryResult>(await response.Content.ReadAsStringAsync());
+                    if (createTimeEntryResult is CreateTimeEntryResult)
                     {
-                        response.EnsureSuccessStatusCode();
-                        var createTimeEntryResult = JsonConvert.DeserializeObject<CreateTimeEntryResult>(await response.Content.ReadAsStringAsync());
-                        if (createTimeEntryResult is CreateTimeEntryResult)
-                        {
-                            result.Add(createTimeEntryResult.TimeEntry);
-                        }
+                        result = createTimeEntryResult.TimeEntry;
                     }
                 }
             }

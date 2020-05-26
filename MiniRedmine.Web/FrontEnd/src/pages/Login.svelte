@@ -1,13 +1,13 @@
 <script>
   import axios from "axios";
-  import StorageService from "../services/StorageService";
+  import {user} from '../stores/userstore';
 
   export let handleNavigation;
 
   async function handleSubmit(event) {
     event.preventDefault();
     const res = await fetch(`api/redmine/userinfo?userApiKey=${userApiKey}`);
-    StorageService.storeUser(await res.json())
+    user.register(await res.json());
     handleNavigation(null, "/");
   }
   let userApiKey = null;

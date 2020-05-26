@@ -1,45 +1,42 @@
 <script>
-  import StorageService from "../services/StorageService";
-
-  export let applicationState = {};
-
+  import { issues } from "../stores/issuestore";
+  import { user } from "../stores/userstore";
   async function handleSubmit(event) {
     event.preventDefault();
     let issueExists = false;
-    for (let index = 0; index < issues.length; index++) {
-      const element = issues[index];
+    let tempIssues = Array.from($issues);
+    for (let index = 0; index < tempIssues.length; index++) {
+      const element = tempIssues[index];
       if (element.id === newIssue) {
         issueExists = true;
       }
     }
     if (issueExists === false) {
       const res = await fetch(
-        `api/redmine/issue/${newIssue}?userApiKey=${applicationState.user.api_key}`
+        `api/redmine/issue/${newIssue}?userApiKey=${$user.api_key}`
       );
-      issues.push(await res.json());
-      StorageService.storeIssues(issues);
-      issues = issues;
-      newIssue = 0;
+      tempIssues.push(await res.json());
+      issues.updateIssues(tempIssues);
     }
   }
 
   function handleRemove(event, id) {
     event.preventDefault();
     let deleteIndex = -1;
-    for (let index = 0; index < issues.length; index++) {
-      const element = issues[index];
+    let tempIssues = Array.from($issues);
+    for (let index = 0; index < tempIssues.length; index++) {
+      const element = tempIssues[index];
       if (element.id === id) {
         deleteIndex = index;
       }
     }
     if (deleteIndex >= 0) {
-      issues.splice(deleteIndex, 1);
-      issues = issues;
-      StorageService.storeIssues(issues);
+      tempIssues.splice(deleteIndex, 1);
+      issues.updateIssues(tempIssues);
     }
   }
+
   let newIssue = 0;
-  $: issues = applicationState.issues;
 </script>
 
 <div class="container">
@@ -58,7 +55,7 @@
       </form>
     </div>
     <div class="col">
-      {#each issues as issue (issue.id)}
+      {#each $issues as issue (issue.id)}
         <p>
           {issue.id} {issue.subject}
           <button
