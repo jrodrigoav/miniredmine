@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MiniRedmine.Web.Models;
+using MiniRedmine.Web.Models.Redmine;
 using MiniRedmine.Web.Services;
 using MiniRedmine.Web.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace MiniRedmine.Web.Controllers
@@ -19,15 +20,23 @@ namespace MiniRedmine.Web.Controllers
         }
 
         [HttpGet("userinfo")]
-        public async Task<IActionResult> UserInfoAsync([FromQuery]string userApiKey)
+        public async Task<IActionResult> GetCurrentUserAsync([FromQuery] string userApiKey)
         {
             if (string.IsNullOrWhiteSpace(userApiKey)) return BadRequest(new { Message = "Try again" });
             var result = await _redmineHttpService.GetCurrentUserAsync(userApiKey);
-            return Ok(new CurrentUserViewModel(result));
+            return Ok(result);
+        }
+
+        [HttpGet("issue/{issueId}")]
+        public async Task<IActionResult> GetIssueAsync([FromRoute, Range(0, 999999)] int issueId, [FromQuery] string userApiKey)
+        {
+            if (string.IsNullOrWhiteSpace(userApiKey)) return BadRequest(new { Message = "Try again" });
+            var result = await _redmineHttpService.GetIssueAsync(userApiKey, issueId);
+            return Ok(result);
         }
 
         [HttpGet("timeentryactivities")]
-        public async Task<IActionResult> TimeEntryActivitiesAsync([FromQuery]string userApiKey)
+        public async Task<IActionResult> GetTimeEntryActivitiesASync([FromQuery] string userApiKey)
         {
             if (string.IsNullOrWhiteSpace(userApiKey)) return BadRequest(new { Message = "Try again" });
             var result = await _redmineHttpService.GetTimeEntryActivitiesASync(userApiKey);
@@ -35,7 +44,7 @@ namespace MiniRedmine.Web.Controllers
         }
 
         [HttpGet("timeentries")]
-        public async Task<IActionResult> TimeEntriesAsync([FromQuery]string userApiKey, [FromQuery]int userId, [FromQuery]string from, [FromQuery]string to)
+        public async Task<IActionResult> GetTimeEntriesAsync([FromQuery] string userApiKey, [FromQuery] int userId, [FromQuery] string from, [FromQuery] string to)
         {
             if (string.IsNullOrWhiteSpace(userApiKey)) return BadRequest(new { Message = "Try again" });
             if (userId == 0) return BadRequest(new { Message = "Try again" });
@@ -46,7 +55,7 @@ namespace MiniRedmine.Web.Controllers
         }
 
         [HttpPost("timeentries")]
-        public async Task<IActionResult> TimeEntriesAsync([FromQuery]string userApiKey, [FromQuery]string spentOn, [FromBody]IEnumerable<CreateTimeEntryViewModel> newTimeEntries)
+        public async Task<IActionResult> CreateTimeEntriesAsync([FromQuery] string userApiKey, [FromQuery] string spentOn, [FromBody] IEnumerable<CreateTimeEntryViewModel> newTimeEntries)
         {
             if (IsValidTimeEntries(userApiKey, spentOn, newTimeEntries, out List<CreateTimeEntryContainer> createTimeEntries))
             {

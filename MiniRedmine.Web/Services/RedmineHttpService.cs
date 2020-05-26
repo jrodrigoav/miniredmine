@@ -1,4 +1,4 @@
-﻿using MiniRedmine.Web.Models;
+﻿using MiniRedmine.Web.Models.Redmine;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -26,9 +26,21 @@ namespace MiniRedmine.Web.Services
             return result;
         }
 
-        public async Task<IEnumerable<TimeEntryActivity>> GetTimeEntryActivitiesASync(string userApiKey)
+        public async Task<Issue> GetIssueAsync(string userApiKey,int issueId)
         {
-            IEnumerable<TimeEntryActivity> result = null;
+            Issue result = null;
+            _httpClient.DefaultRequestHeaders.Add(REDMINE_AUTH_HEADER, userApiKey);
+            using (var response = await _httpClient.GetAsync($"issues/{issueId}.json"))
+            {
+                response.EnsureSuccessStatusCode();
+                result = JsonConvert.DeserializeObject<IssueContainer>(await response.Content.ReadAsStringAsync())?.Issue;
+            }
+            return result;
+        }
+
+        public async Task<IEnumerable<Activity>> GetTimeEntryActivitiesASync(string userApiKey)
+        {
+            IEnumerable<Activity> result = null;
             _httpClient.DefaultRequestHeaders.Add(REDMINE_AUTH_HEADER, userApiKey);
             using (var response = await _httpClient.GetAsync("enumerations/time_entry_activities.json"))
             {

@@ -22,7 +22,7 @@
   <ItemGroup>
     <Compile Remove="_PublishedWebsites\**" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup>    
     <Folder Include="Logs\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>

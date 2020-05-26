@@ -1,59 +1,31 @@
 {
   "author": "Rodrigo Acedo <jrodrigoav@gmail.com>",
-  "babel": {
-    "presets": [
-      "@babel/env",
-      "@babel/react"
-    ],
-    "plugins": [
-      [
-        "@babel/plugin-transform-runtime",
-        {
-          "regenerator": true
-        }
-      ]
-    ]
-  },
   "dependencies": {
     "axios": "0.19.2",
-    "moment": "2.24.0",
-    "prop-types": "15.7.2",
-    "react": "16.13.1",
-    "react-bootstrap": "1.0.0",
-    "react-dom": "16.13.1",
-    "react-router-dom": "5.1.2"
+    "moment": "2.26.0",
+    "svelte": "3.22.3"
   },
   "description": "MiniRedmine by JRAV",
   "devDependencies": {
-    "@babel/cli": "7.8.4",
-    "@babel/core": "7.9.0",
-    "@babel/preset-env": "7.9.0",
-    "@babel/preset-react": "7.9.4",
-    "@babel/runtime": "7.9.2",
-    "@babel/plugin-transform-runtime": "7.9.0",
-    "babel-loader": "8.1.0",
+    "cross-env": "7.0.2",
+    "css-loader": "3.5.3",
     "clean-webpack-plugin": "3.0.0",
-    "copy-webpack-plugin": "5.1.1",
-    "css-loader": "3.4.2",
-    "file-loader": "6.0.0",
-    "html-webpack-plugin": "4.0.2",
+    "copy-webpack-plugin": "6.0.1",
+    "html-webpack-plugin": "4.3.0",
     "mini-css-extract-plugin": "0.9.0",
-    "optimize-css-assets-webpack-plugin": "5.0.3",
-    "style-loader": "1.1.3",
-    "url-loader": "4.0.0",
-    "webpack": "4.42.1",
-    "webpack-bundle-analyzer": "3.6.1",
-    "webpack-cli": "3.3.11",
-    "webpack-manifest-plugin": "3.0.0-rc.0",
+    "style-loader": "1.2.1",
+    "svelte-loader": "2.13.6",
+    "webpack": "5.0.0-beta.16",
+    "webpack-cli": "4.0.0-beta.8",
     "webpack-merge": "4.2.2"
   },
   "license": "MIT",
   "name": "miniredmine-spa",
   "repository": "https://github.com/jrodrigoav/shiny-octo-redmine.git",
   "scripts": {
-    "build": "webpack --config=config/webpack.dev.js --mode=development",
-    "publish": "webpack --config=config/webpack.prod.js --mode=production",
-    "watch": "webpack --config=config/webpack.dev.js --watch --mode=development"
+    "build": "cross-env NODE_ENV=development webpack --config config/webpack.dev.js",
+    "publish": "cross-env NODE_ENV=production webpack --config config/webpack.prod.js",
+    "watch": "cross-env NODE_ENV=development webpack --config config/webpack.dev.js --watch"
   },
   "version": "2.0.0"
 }

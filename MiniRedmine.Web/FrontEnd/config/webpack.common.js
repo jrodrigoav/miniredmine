@@ -2,9 +2,9 @@
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-const miniredmine2Entry = path.resolve(__dirname, "../src", "Root.jsx");
+const miniredmine2Entry = path.resolve(__dirname, "../src", "main.js");
 const indexHtml = path.resolve(__dirname, '../', 'index.html');
-const assetsSource = path.resolve(__dirname, "../src/assets");
+const assetsSource = path.resolve(__dirname, "../assets");
 const distDirectory = path.resolve(__dirname, '../../wwwroot');
 
 module.exports = {
@@ -15,13 +15,25 @@ module.exports = {
         filename: '[name].[hash].js',
         path: distDirectory,
         publicPath: "/"
-    },   
+    },
+    resolve: {
+        alias: {
+            svelte: path.resolve('node_modules', 'svelte')
+        },
+        extensions: ['.mjs', '.js', '.svelte'],
+        mainFields: ['svelte', 'browser', 'module', 'main']
+    },
     module: {
         rules: [
             {
-                test: /\.(js|jsx)$/,
-                exclude: [/node_modules/],
-                use: [{ loader: "babel-loader" }]
+                test: /\.svelte$/,
+                use: {
+                    loader: 'svelte-loader',
+                    options: {
+                        emitCss: true,
+                        hotReload: true
+                    }
+                }
             },
             {
                 test: /.*\.(gif|png|jp(e*)g|svg)$/i,
@@ -34,29 +46,18 @@ module.exports = {
                         }
                     }
                 ]
-            },
-            // Vendor CSS loader
-            // This is necessary to pack third party libraries like antd
-            {
-                test: /\.css$/,
-                include: path.resolve(__dirname, '../node_modules'),
-                use: [
-                    'style-loader',
-                    'css-loader'
-                ]
             }
         ]
     },
-    plugins: [        
-        new CopyWebpackPlugin([{
-            from: assetsSource,
-            to: 'assets'
-        }]),
+    plugins: [
+        new CopyWebpackPlugin({
+            patterns: [{
+                from: assetsSource,
+                to: 'assets'
+            }]
+        }),
         new HtmlWebPackPlugin({
             template: indexHtml
         })
-    ],
-    resolve: {
-        extensions: ['.js', '.jsx']
-    }
+    ]
 };
