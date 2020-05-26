@@ -69,7 +69,7 @@
   onMount(async () => {
     if ($user.unauthorized === undefined && $activities.length === 0) {
       const res = await fetch(
-        `api/redmine/timeentryactivities?userApiKey=${internaluser.api_key}`
+        `api/redmine/timeentryactivities?userApiKey=${$user.api_key}`
       );
       const tempActivities = await res.json();
       activities.updateActivties(tempActivities);
