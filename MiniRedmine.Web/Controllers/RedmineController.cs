@@ -55,9 +55,20 @@ namespace MiniRedmine.Web.Controllers
         }
 
         [HttpPost("timeentries")]
-        public async Task<IActionResult> CreateTimeEntriesAsync([FromQuery] string userApiKey, [FromBody]CreateTimeEntryViewModel newTimeEntry)
+        public async Task<IActionResult> CreateTimeEntriesAsync([FromQuery] string userApiKey, [FromBody] CreateTimeEntryViewModel newTimeEntry)
         {
+            //await _redmineHttpService.GetCurrentUserAsync(userApiKey);
             return Created("", await _redmineHttpService.CreateTimeEntriesAsync(userApiKey, newTimeEntry.ConvertToCreateTimeEntry()));
+            /*var timeEntry = new TimeEntry
+            {
+                Activity = new Activity { Name = "Created", Id = newTimeEntry.ActivityId },
+                Id = new Random().Next(99990000, 99999999),
+                Comments = newTimeEntry.Comments,
+                Hours = newTimeEntry.Hours,
+                Issue = new IdNameBase { Name = "Created", Id = newTimeEntry.IssueId },
+                SpentOn = newTimeEntry.SpentOn
+            };
+            return Created("", timeEntry);*/
         }
     }
 }

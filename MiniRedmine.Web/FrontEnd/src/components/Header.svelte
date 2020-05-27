@@ -53,6 +53,14 @@
             Templates
           </a>
         </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            href="/timeentries"
+            on:click={(e) => handleNavigation(e, '/timeentries')}>
+            Time Entries
+          </a>
+        </li>
       {/if}
     </ul>
   </div>

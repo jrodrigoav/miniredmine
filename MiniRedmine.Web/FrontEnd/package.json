@@ -2,6 +2,7 @@
   "author": "Rodrigo Acedo <jrodrigoav@gmail.com>",
   "dependencies": {
     "axios": "0.19.2",
+    "lodash": "4.17.15",
     "moment": "2.26.0",
     "svelte": "3.22.3"
   },
