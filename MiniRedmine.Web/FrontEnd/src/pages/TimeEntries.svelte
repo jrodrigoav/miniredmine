@@ -1,6 +1,8 @@
 <script>
   import { onMount } from "svelte";
+  import indexOf from "lodash/indexOf";
   import filter from "lodash/filter";
+  import sumBy from "lodash/sumBy";
   import sortBy from "lodash/sortBy";
   import moment from "moment";
   import { user } from "../stores/userstore";
@@ -8,9 +10,20 @@
   import { templates } from "../stores/templatestore";
   import { activities } from "../stores/activitystore";
 
+  const holidays = [
+    "2020-05-25",
+    "2020-07-04",
+    "2020-09-07",
+    "2020-09-16",
+    "2020-10-12",
+    "2020-11-11",
+    "2020-11-26",
+    "2020-12-25",
+  ];
   let quincena = [];
   let serverEntries = [];
   let displayWeekends = false;
+  $: modalWarning = false;
   $: timeEntries = [];
   $: modalData = { turno: {}, entries: [] };
 
@@ -89,7 +102,10 @@
 
   function handleModalOpen(event, timeEntry) {
     modalData.turno = timeEntry.turno;
-
+    const index = indexOf(holidays, modalData.turno.fecha);
+    console.log(`index ${index}`);
+    modalWarning =
+      modalData.turno.dia === 0 || modalData.turno.dia === 6 || index >= 0;
     if (timeEntry.empty && $templates.length === 0) {
       modalData.entries.push(addEntry(timeEntry.turno.fecha));
     } else if ($templates.length > 0 && timeEntry.empty) {
@@ -183,23 +199,29 @@
       modalData.entries = tempEntries;
     }
   }
+
+  function setModalWarning(dia, fecha) {}
 </script>
 
 <style>
+  td {
+    color: black;
+    text-shadow: 1px 1px lightgrey;
+  }
   tr.monday {
-    background-color: #a3aeaa;
+    background-color: #a3afaa;
   }
   tr.tuesday {
-    background-color: #a9a2a2;
+    background-color: #b9b2c2;
   }
   tr.wednesday {
-    background-color: #abafa9;
+    background-color: #abd2a9;
   }
   tr.thursday {
-    background-color: #b9bebf;
+    background-color: #b9bebc;
   }
   tr.friday {
-    background-color: #cfcec1;
+    background-color: #4bbec1;
   }
   tr.saturday {
     background-color: lightsalmon;
@@ -210,6 +232,20 @@
 </style>
 
 <div class="container">
+  <div class="row">
+    <div class="col">
+      {#each $issues as issue}
+        <h5>
+          Total de horas para {issue.subject} : {sumBy( filter(
+              timeEntries,
+              function (o) {
+                return o.issue.id == issue.id;
+              }
+            ), 'hours' )}
+        </h5>
+      {/each}
+    </div>
+  </div>
   <div class="row">
     <div class="col">
       <table class="table table-sm table-hover">
@@ -267,8 +303,7 @@
     aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
-        <div
-          class="modal-header {modalData.turno.dia === 0 || modalData.turno.dia === 6 ? 'bg-warning' : ''}">
+        <div class="modal-header {modalWarning ? 'bg-warning' : ''}">
           <h5 class="modal-title" id="timeEntriesFormTitle">
             Register Time Entries for {modalData.turno.diaSemana} {modalData.turno.fecha}
           </h5>
