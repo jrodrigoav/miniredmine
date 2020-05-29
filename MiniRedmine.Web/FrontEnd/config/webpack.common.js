@@ -12,7 +12,7 @@ module.exports = {
         main: miniredmine2Entry
     },
     output: {
-        filename: '[name].[hash].js',
+        filename: 'js/[name].js?t=[hash:8]',
         path: distDirectory,
         publicPath: "/"
     },
