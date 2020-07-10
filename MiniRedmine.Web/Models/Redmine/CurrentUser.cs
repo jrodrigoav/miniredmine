@@ -1,23 +1,23 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace MiniRedmine.Web.Models.Redmine
 {
     public class CurrentUser
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public int Id { get; set; }
-        [JsonProperty("login")]
+        [JsonPropertyName("login")]
         public string Login { get; set; }
-        [JsonProperty("firstname")]
+        [JsonPropertyName("firstname")]
         public string FirstName { get; set; }
-        [JsonProperty("lastname")]
+        [JsonPropertyName("lastname")]
         public string LastName { get; set; }
-        [JsonProperty("created_on")]
+        [JsonPropertyName("created_on")]
         public DateTime CreatedOn { get; set; }
-        [JsonProperty("last_login_on")]
+        [JsonPropertyName("last_login_on")]
         public DateTime? LastLoginOn { get; set; }
-        [JsonProperty("api_key")]
+        [JsonPropertyName("api_key")]
         public string ApiKey { get; set; }
     }
 }

@@ -2,23 +2,23 @@
   "author": "Rodrigo Acedo <jrodrigoav@gmail.com>",
   "dependencies": {
     "axios": "0.19.2",
-    "lodash": "4.17.15",
+    "lodash": "^4.17.19",
     "moment": "2.26.0",
     "svelte": "3.22.3"
   },
   "description": "MiniRedmine by JRAV",
   "devDependencies": {
     "cross-env": "7.0.2",
-    "css-loader": "3.5.3",
+    "css-loader": "3.6.0",
     "clean-webpack-plugin": "3.0.0",
-    "copy-webpack-plugin": "6.0.1",
+    "copy-webpack-plugin": "6.0.3",
     "html-webpack-plugin": "4.3.0",
     "mini-css-extract-plugin": "0.9.0",
     "style-loader": "1.2.1",
     "svelte-loader": "2.13.6",
-    "webpack": "5.0.0-beta.16",
+    "webpack": "5.0.0-beta.22",
     "webpack-cli": "4.0.0-beta.8",
-    "webpack-merge": "4.2.2"
+    "webpack-merge": "5.0.9"
   },
   "license": "MIT",
   "name": "miniredmine-spa",

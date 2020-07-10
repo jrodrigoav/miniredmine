@@ -1,10 +1,10 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace MiniRedmine.Web.Models.Redmine
 {
     public class IssueContainer
     {
-        [JsonProperty(PropertyName = "issue")]
+        [JsonPropertyName( "issue")]
         public Issue Issue { get; set; }
     }
 }
