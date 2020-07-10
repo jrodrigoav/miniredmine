@@ -346,7 +346,7 @@
                       name="Issue">
                       <option value="" selected>--Select an issue--</option>
                       {#each $issues as issue (issue.id)}
-                        <option value={issue.id}>{issue.subject}</option>
+                        <option value={issue.id}>{issue.id} {issue.subject}</option>
                       {/each}
                     </select>
                   </td>

@@ -16,7 +16,7 @@ namespace MiniRedmine.Web
             .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
             .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
             .Enrich.FromLogContext()
-            .WriteTo.File("Logs\\MiniRedmine.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 3)
+            .WriteTo.File("Logs\\Miniredmine.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 3)
             .CreateLogger();
 
             try
@@ -36,10 +36,12 @@ namespace MiniRedmine.Web
             }
         }
 
-        public static IWebHostBuilder CreateHostBuilder(string[] args) =>
-           WebHost.CreateDefaultBuilder(args)
-            .UseStartup<Startup>()
-            .UseIISIntegration()
-            .UseSerilog();
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>()
+                    .UseSerilog();
+                });
     }
 }

@@ -1,31 +1,31 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace MiniRedmine.Web.Models.Redmine
 {
     public class Issue
     {
-        [JsonProperty(PropertyName = "id")]
+        [JsonPropertyName("id")]
         public int Id { get; set; }
 
-        [JsonProperty(PropertyName = "project")]
+        [JsonPropertyName("project")]
         public IdNameBase Project { get; set; }
 
-        [JsonProperty(PropertyName = "assigned_to")]
+        [JsonPropertyName("assigned_to")]
         public IdNameBase AssignedTo { get; set; }
 
-        [JsonProperty(PropertyName = "subject")]
+        [JsonPropertyName("subject")]
         public string Subject { get; set; }
 
-        [JsonProperty(PropertyName = "description")]
+        [JsonPropertyName("description")]
         public string Description { get; set; }
 
-        [JsonProperty(PropertyName = "start_date")]
-        public string start_date { get; set; }
+        [JsonPropertyName("start_date")]
+        public string StartDate { get; set; }
 
-        [JsonProperty(PropertyName = "spent_hours")]
+        [JsonPropertyName("spent_hours")]
         public double SpentHours { get; set; }
 
-        [JsonProperty(PropertyName = "total_spent_hours")]
+        [JsonPropertyName("total_spent_hours")]
         public double TotalSpentHours { get; set; }
     }
 }
