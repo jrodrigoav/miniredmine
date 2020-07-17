@@ -41,7 +41,7 @@
 
 <div class="container">
   <div class="row">
-    <div class="col">
+    <div class="col-2">
       <form on:submit={handleSubmit}>
         <input
           type="number"
@@ -54,11 +54,12 @@
         </button>
       </form>
     </div>
-    <div class="col">
+    <div class="col-8">
       <table class="table table-striped">
         <thead>
           <tr>
             <th>Issue</th>
+            <th>Project</th>
             <th>Subject</th>
             <th />
           </tr>
@@ -67,6 +68,7 @@
           {#each $issues as issue (issue.id)}
             <tr>
               <td>{issue.id}</td>
+              <td>{issue.project.name}</td>
               <td>{issue.subject}</td>
               <td>
                 <button

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MiniRedmine.Web.Services;
@@ -38,7 +39,15 @@ namespace MiniRedmine.Web
                 DefaultFileNames = new List<string> { "index.html" }
             });
 
-            app.UseStaticFiles();
+            const string cacheMaxAge = "604800";
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = ctx =>
+                {
+                    // using Microsoft.AspNetCore.Http;
+                    ctx.Context.Response.Headers.Append("Cache-Control", $"public, max-age={cacheMaxAge}");
+                }
+            });
 
             app.UseRouting();
             app.UseEndpoints(endpoints => endpoints.MapControllers());

@@ -1,24 +1,24 @@
 ﻿using MiniRedmine.Web.Models.Redmine;
-using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace MiniRedmine.Web.ViewModels
 {
     public class CreateTimeEntryViewModel
     {
-        [Required, JsonProperty("spent_on")]
+        [Required, JsonPropertyName("spent_on")]
         public string SpentOn { get; set; }
 
-        [Required, JsonProperty("issue")]
+        [Required, JsonPropertyName("issue")]
         public int IssueId { get; set; }
 
-        [Required, JsonProperty("activity")]
+        [Required, JsonPropertyName("activity")]
         public int ActivityId { get; set; }
         
-        [Required, JsonProperty("hours")]
+        [Required, JsonPropertyName("hours")]
         public double Hours { get; set; }
         
-        [Required, StringLength(255), JsonProperty("comments")]
+        [Required, StringLength(255), JsonPropertyName("comments")]
         public string Comments { get; set; }
 
         public CreateTimeEntry ConvertToCreateTimeEntry()

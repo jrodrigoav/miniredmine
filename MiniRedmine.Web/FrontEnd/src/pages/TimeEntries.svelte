@@ -209,25 +209,25 @@
     text-shadow: 1px 1px lightgrey;
   }
   tr.monday {
-    background-color: #a3afaa;
+    background-color: lightgoldenrodyellow;
   }
   tr.tuesday {
-    background-color: #b9b2c2;
+    background-color:lightpink;
   }
   tr.wednesday {
-    background-color: #abd2a9;
+    background-color: lightseagreen;
   }
   tr.thursday {
-    background-color: #b9bebc;
+    background-color:lightsalmon;
   }
   tr.friday {
-    background-color: #4bbec1;
+    background-color: lightsteelblue;
   }
   tr.saturday {
-    background-color: lightsalmon;
+    background-color: wheat;
   }
   tr.sunday {
-    background-color: lightcoral;
+    background-color: coral;
   }
 </style>
 
@@ -236,7 +236,7 @@
     <div class="col">
       {#each $issues as issue}
         <h5>
-          Total de horas para {issue.subject} : {sumBy( filter(
+          Total de horas para {issue.project.name} : {sumBy( filter(
               timeEntries,
               function (o) {
                 return o.issue.id == issue.id;
@@ -346,9 +346,9 @@
                       name="Issue">
                       <option value="" selected>--Select an issue--</option>
                       {#each $issues as issue (issue.id)}
-                        <option value={issue.id}>{issue.id} {issue.subject}</option>
+                        <option value={issue.id}>{issue.id} {issue.project.name}</option>
                       {/each}
-                    </select>
+                    </select>                    
                   </td>
                   <td>
                     <select

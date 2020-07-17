@@ -1,13 +1,14 @@
 ﻿const path = require('path');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const miniredmine2Entry = path.resolve(__dirname, "../src", "main.js");
 const indexHtml = path.resolve(__dirname, '../', 'index.html');
 const assetsSource = path.resolve(__dirname, "../assets");
 const distDirectory = path.resolve(__dirname, '../../wwwroot');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
 
 module.exports = {
     mode: 'production',

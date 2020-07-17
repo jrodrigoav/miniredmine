@@ -7,8 +7,7 @@
   <div class="row">
     <div class="col-12">
       <div
-        class="card card-inverse"
-        style="background-color: #333; border-color: #333;">
+        class="card card-inverse">
         <div class="card-block">
           <div class="row">
             <div class="col-md-8 col-sm-8">
