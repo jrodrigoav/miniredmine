@@ -8,14 +8,20 @@
   },
   "description": "MiniRedmine by JRAV",
   "devDependencies": {
+    "@tsconfig/svelte": "1.0.2",
+    "@types/lodash": "4.14.108",
     "cross-env": "7.0.2",
     "css-loader": "3.6.0",
     "clean-webpack-plugin": "3.0.0",
     "copy-webpack-plugin": "6.0.3",
     "html-webpack-plugin": "4.3.0",
     "mini-css-extract-plugin": "0.9.0",
+    "svelte-check": "0.1.55",
     "style-loader": "1.2.1",
     "svelte-loader": "2.13.6",
+    "svelte-preprocess": "4.0.8",
+    "ts-loader": "8.0.1",
+    "typescript": "3.9.7",
     "webpack": "5.0.0-beta.22",
     "webpack-cli": "4.0.0-beta.8",
     "webpack-merge": "5.0.9"
@@ -25,8 +31,7 @@
   "repository": "https://github.com/jrodrigoav/shiny-octo-redmine.git",
   "scripts": {
     "build": "cross-env NODE_ENV=development webpack --config config/webpack.dev.js",
-    "publish": "cross-env NODE_ENV=production webpack --config config/webpack.prod.js",
-    "watch": "cross-env NODE_ENV=development webpack --config config/webpack.dev.js --watch"
+    "publish": "cross-env NODE_ENV=production webpack --config config/webpack.prod.js"
   },
   "version": "2.0.0"
 }

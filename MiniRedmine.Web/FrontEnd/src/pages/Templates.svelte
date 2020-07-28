@@ -1,11 +1,13 @@
-<script>
+<script lang="ts">
   import { onMount } from "svelte";
   import { user } from "../stores/userstore";
   import { issues } from "../stores/issuestore";
   import { templates } from "../stores/templatestore";
   import { activities } from "../stores/activitystore";
 
-  function handleSubmit(event) {
+  import ITemplate from "../interfaces/ITemplate";
+
+  function handleSubmit(event:Event) {
     event.preventDefault();
     let tempTemplates = Array.from($templates);
     tempTemplates.push(newtemplate);
@@ -13,7 +15,7 @@
     newtemplate = initTemplate();
   }
 
-  function handleRemove(event, id) {
+  function handleRemove(event: Event, id: string) {
     event.preventDefault();
     let deleteIndex = -1;
     let tempTemplates = Array.from($templates);
@@ -29,18 +31,18 @@
     }
   }
 
-  function initTemplate() {
+  function initTemplate(): ITemplate {
     const now = new Date();
     return {
       id: `${now.getFullYear()}${now.getMonth()}${now.getDay()}${now.getHours()}${now.getMinutes()}${now.getSeconds()}${now.getMilliseconds()}`,
-      issue: "",
-      activity: "",
+      issue: 0,
+      activity: 0,
       comments: "",
       hours: 0,
     };
   }
 
-  function translateActivity(activity) {
+  function translateActivity(activity: number) {
     let result = "";
     for (let index = 0; index < $activities.length; index++) {
       const element = $activities[index];
@@ -52,7 +54,7 @@
     return result;
   }
 
-  function translateIssue(issue) {
+  function translateIssue(issue: number) {
     let result = "";
     for (let index = 0; index < $issues.length; index++) {
       const element = $issues[index];
@@ -133,7 +135,7 @@
       <table class="table table-striped">
         <caption>
           <p class="text-info">
-            Total Hours: {$templates.reduce((a, b) => a + Number.parseFloat(b.hours), 0)}
+            Total Hours: {$templates.reduce((a, b) => a + b.hours, 0)}
           </p>
         </caption>
         <thead>

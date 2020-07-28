@@ -1,16 +1,15 @@
-<script>
-  import axios from "axios";
-  import {user} from '../stores/userstore';
+<script lang="typescript">
+  import { user } from "../stores/userstore";
 
-  export let handleNavigation;
+  export let handleNavigation:Function;
 
-  async function handleSubmit(event) {
+  async function handleSubmit(event:Event):Promise<void> {
     event.preventDefault();
     const res = await fetch(`api/redmine/userinfo?userApiKey=${userApiKey}`);
     user.register(await res.json());
     handleNavigation(null, "/");
   }
-  let userApiKey = null;
+  let userApiKey: string = null;
 </script>
 
 <div class="container">
@@ -26,7 +25,7 @@
           id="inputApiKey"
           class="form-control"
           placeholder="Redmine Api Key"
-          required=""
+          required
           bind:value={userApiKey} />
         <button class="btn btn-lg btn-primary btn-block" type="submit">
           Login

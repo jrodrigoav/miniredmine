@@ -24,18 +24,26 @@ module.exports = {
         alias: {
             svelte: path.resolve('node_modules', 'svelte')
         },
-        extensions: ['.mjs', '.js', '.svelte'],
+        extensions: ['.mjs', '.js', '.ts', '.tsx', '.svelte'],
         mainFields: ['svelte', 'browser', 'module', 'main']
     },
     module: {
         rules: [
+            {
+                test: /\.tsx?$/,
+                use: 'ts-loader',
+                exclude: /node_modules/,
+            },
             {
                 test: /\.svelte$/,
                 use: {
                     loader: 'svelte-loader',
                     options: {
                         emitCss: true,
-                        hotReload: true
+                        hotReload: false,
+                        preprocess: require('svelte-preprocess')({
+                            /* options */
+                        })
                     }
                 }
             },

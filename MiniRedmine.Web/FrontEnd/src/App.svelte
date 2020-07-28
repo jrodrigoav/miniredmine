@@ -1,22 +1,22 @@
-﻿<script>
+﻿<script lang="typescript">
   import { onMount } from "svelte";
-  import Header from "./components/Header";
-  import Index from "./pages/Index";
-  import Login from "./pages/Login";
-  import Profile from "./pages/Profile";
-  import Issues from "./pages/Issues";
-  import Templates from "./pages/Templates";
-  import TimeEntries from "./pages/TimeEntries";
+  import Header from "./components/Header.svelte";
+  import Index from "./pages/Index.svelte";
+  import Login from "./pages/Login.svelte";
+  import Profile from "./pages/Profile.svelte";
+  import Issues from "./pages/Issues.svelte";
+  import Templates from "./pages/Templates.svelte";
+  import TimeEntries from "./pages/TimeEntries.svelte";
   import { user } from "./stores/userstore";
 
-  function routeHandler(event, route) {
+  function routeHandler(event: Event, route: string) {
     event ? event.preventDefault() : () => {};
     window.history.replaceState(null, routeTranslator(route), route);
     currentRoute = route;
   }
 
-  function routeTranslator(route) {
-    let result;
+  function routeTranslator(route: string): string {
+    let result: string;
     switch (route) {
       case "/login":
         result = "Login";
@@ -39,7 +39,7 @@
     }
     return result;
   }
-
+  let currentRoute: string;
   $: currentRoute = "/";
 
   onMount(() => {
