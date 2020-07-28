@@ -1,7 +1,8 @@
-<script>
+<script lang="typescript">
   import { issues } from "../stores/issuestore";
   import { user } from "../stores/userstore";
-  async function handleSubmit(event) {
+  import IIssue from "../interfaces/IIssue";
+  async function handleSubmit(event:Event) {
     event.preventDefault();
     let issueExists = false;
     let tempIssues = Array.from($issues);
@@ -20,10 +21,10 @@
     }
   }
 
-  function handleRemove(event, id) {
+  function handleRemove(event:Event, id:number) {
     event.preventDefault();
-    let deleteIndex = -1;
-    let tempIssues = Array.from($issues);
+    let deleteIndex:number = -1;
+    let tempIssues:IIssue[] = Array.from($issues);
     for (let index = 0; index < tempIssues.length; index++) {
       const element = tempIssues[index];
       if (element.id === id) {
@@ -36,7 +37,7 @@
     }
   }
 
-  let newIssue = 0;
+  let newIssue: number = 0;
 </script>
 
 <div class="container">

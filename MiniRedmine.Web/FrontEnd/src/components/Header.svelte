@@ -1,6 +1,6 @@
-﻿<script>
-  export let handleNavigation;
+﻿<script lang="typescript">
   import { user } from "../stores/userstore";
+  export let handleNavigation: Function;  
 </script>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-3">

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import moment from "moment";
   import {user} from '../stores/userstore';
   const lastLogin = moment($user.last_login_on).format("YYYY-MMM-DD HH:mm Z");  
