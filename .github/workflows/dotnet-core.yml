@@ -17,7 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+    - uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.301
     - name: Install dependencies
@@ -31,8 +31,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}                 
     - name: Install NPM packages
+      working-directory: ./FrontEnd      
+      run: npm install
+    - name: Publish frontend      
       working-directory: ./FrontEnd
-      run: npm install            
-    - name: Publish frontend
-      working-directory: ./FrontEnd            
       run: npm run publish --if-present
