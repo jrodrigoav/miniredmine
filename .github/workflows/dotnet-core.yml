@@ -1,4 +1,4 @@
-name: .NET Core
+name: .NET Core + Webpack
 
 on:
   push:
@@ -7,6 +7,7 @@ on:
     branches: [ principal ]
 
 jobs:
+  
   build:
     strategy:
       matrix:
@@ -17,7 +18,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
-    - uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.301
     - name: Install dependencies
@@ -27,7 +28,7 @@ jobs:
     - name: Test
       run: dotnet test --no-restore --verbosity normal
     - name: Use Node.js ${{ matrix.node-version }}      
-    - uses: actions/setup-node@v1      
+      uses: actions/setup-node@v1      
       with:
         node-version: ${{ matrix.node-version }}                 
     - name: Install NPM packages
