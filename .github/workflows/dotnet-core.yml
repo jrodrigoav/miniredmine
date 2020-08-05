@@ -7,14 +7,8 @@ on:
     branches: [ principal ]
 
 jobs:
-  
-  build:
-    strategy:
-      matrix:
-        node-version: [14.x]
-    
+  build-net:
     runs-on: ubuntu-latest   
-
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
@@ -27,13 +21,20 @@ jobs:
       run: dotnet build --configuration Release --no-restore
     - name: Test
       run: dotnet test --no-restore --verbosity normal
-    - name: Use Node.js ${{ matrix.node-version }}      
-      uses: actions/setup-node@v1      
-      with:
-        node-version: ${{ matrix.node-version }}                 
-    - name: Install NPM packages
-      working-directory: ./FrontEnd      
-      run: npm install
-    - name: Publish frontend      
-      working-directory: ./FrontEnd
-      run: npm run publish --if-present
+    
+  build-front:
+    strategy:
+      matrix:
+        node-version: [14.x]    
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install NPM packages        
+        run: npm install
+        working-directory: ./FrontEnd
+      - name: Publish frontend        
+        run: npm run publish --if-present
+        working-directory: ./FrontEnd
