@@ -29,7 +29,10 @@ jobs:
     - name: Use Node.js ${{ matrix.node-version }}      
     - uses: actions/setup-node@v1      
       with:
-        node-version: ${{ matrix.node-version }}           
-    - working-directory: ./FrontEnd
-    - run: npm install      
-    - run: npm run publish --if-present
+        node-version: ${{ matrix.node-version }}                 
+    - name: Install NPM packages
+      working-directory: ./FrontEnd
+      run: npm install            
+    - name: Publish frontend
+      working-directory: ./FrontEnd            
+      run: npm run publish --if-present
