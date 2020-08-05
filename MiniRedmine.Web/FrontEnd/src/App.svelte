@@ -7,6 +7,7 @@
   import Issues from "./pages/Issues.svelte";
   import Templates from "./pages/Templates.svelte";
   import TimeEntries from "./pages/TimeEntries.svelte";
+  import Report from "./pages/Report.svelte";
   import { user } from "./stores/userstore";
 
   function routeHandler(event: Event, route: string) {
@@ -32,6 +33,9 @@
         break;
       case "/timeentries":
         result = "Time Entries";
+        break;
+        case "/report":
+        result = "Time Card";
         break;
       default:
         result = "Index";
@@ -60,6 +64,8 @@
   <Templates />
 {:else if currentRoute === '/timeentries' && $user.unauthorized === undefined}
   <TimeEntries />
+{:else if currentRoute === '/report' && $user.unauthorized === undefined}
+  <Report />
 {:else}
   <Index />
 {/if}

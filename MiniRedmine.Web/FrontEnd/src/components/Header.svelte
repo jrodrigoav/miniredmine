@@ -61,6 +61,14 @@
             Time Entries
           </a>
         </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            href="/report"
+            on:click={(e) => handleNavigation(e, '/report')}>
+            Report
+          </a>
+        </li>
       {/if}
     </ul>
   </div>
