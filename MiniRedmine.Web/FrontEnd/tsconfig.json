@@ -6,8 +6,8 @@
     ],
     "exclude": [
         "node_modules/*",
-        "__sapper__/*",
-        "public/*"
+        "config/*",
+        "assets/*"
     ],
     "compilerOptions": {
         "allowSyntheticDefaultImports":true,
