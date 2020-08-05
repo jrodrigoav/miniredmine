@@ -28,13 +28,14 @@ jobs:
         node-version: [14.x]    
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2        
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install NPM packages        
         run: npm install
-        working-directory: ./FrontEnd
+        #working-directory: ./FrontEnd
       - name: Publish frontend        
         run: npm run publish --if-present
-        working-directory: ./FrontEnd
+        #working-directory: ./FrontEnd
