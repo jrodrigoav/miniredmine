@@ -35,7 +35,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install NPM packages        
         run: npm install
-        #working-directory: ./FrontEnd
+        working-directory: ./MiniRedmine.Web/FrontEnd
       - name: Publish frontend        
         run: npm run publish --if-present
-        #working-directory: ./FrontEnd
+        working-directory: ./MiniRedmine.Web/FrontEnd
