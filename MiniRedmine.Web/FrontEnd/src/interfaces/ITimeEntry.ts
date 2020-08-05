@@ -1,15 +1,12 @@
-import IIdName from "./IIdName";
-import IActivity from "./IActivity";
+import ITurno from "./ITurno";
 
-export default interface ITimeEntry{
-    id:number;
-    project:IIdName;
-    issue:IIdName;
-    user:IIdName;
-    activity:IActivity;
-    hours:number;
-    comments:string;
-    spent_on:string;
-    created_on:Date;
-    updated_on:Date;
+export default interface ITimeEntry {
+    id: number;
+    spent_on: string;
+    issueId:number;
+    issue: string;
+    activity: string;
+    comments: string;
+    hours: number;
+    jornada: ITurno;
 }

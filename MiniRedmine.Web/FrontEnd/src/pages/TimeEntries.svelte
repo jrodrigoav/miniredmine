@@ -1,8 +1,7 @@
 <script lang="typescript">
   import { onMount } from "svelte";
   import indexOf from "lodash/indexOf";
-  import filter from "lodash/filter";
-  import sumBy from "lodash/sumBy";
+  import filter from "lodash/filter";  
   import sortBy from "lodash/sortBy";
   import moment from "moment";
   import { user } from "../stores/userstore";
@@ -12,9 +11,9 @@
   import INewTimeEntry from "../interfaces/INewTimeEntry";
   import ITimeEntry from "../interfaces/ITimeEntry";
   import ITurno from "../interfaces/ITurno";
-  import IModalData from "../interfaces/IModalData";
-  import IIssue from "../interfaces/IIssue";
+  import IModalData from "../interfaces/IModalData";  
   import ITemplate from "../interfaces/ITemplate";
+  import IServerTimeEntry from "../interfaces/IServerTimeEntry";
 
   const holidays = [
     "2020-05-25",
@@ -26,15 +25,15 @@
     "2020-11-26",
     "2020-12-25",
   ];
-  let quincena: ITurno[] = new Array<ITurno>();
-  let serverEntries: ITimeEntry[] = new Array<ITimeEntry>();
-  let displayWeekends = false;
-  let timeEntries: INewTimeEntry[];
-  let modalWarning: boolean;
+  let quincena: ITurno[] = [];
+  let serverEntries: IServerTimeEntry[];
+  let displayEntries: ITimeEntry[];
+  let displayWeekends = false;  
+  let modalWarning: boolean;  
   $: modalWarning = false;
-  $: timeEntries = new Array<INewTimeEntry>();
-  let modalData: IModalData;
-  $: modalData = { turno: {} as ITurno, entries: new Array<INewTimeEntry>() };
+  $: displayEntries = [];
+  let modalData: IModalData;  
+  $: modalData = { turno: {} as ITurno, entries: [] };
 
   onMount(async () => {
     const now = moment();
@@ -79,100 +78,91 @@
   }
 
   function refreshTable() {
-    let tempEntries: INewTimeEntry[] = [];
-    quincena.forEach((element) => {
-      const entries: ITimeEntry[] = filter(serverEntries, {
-        spent_on: element.fecha,
+    let tempEntries: ITimeEntry[] = [];
+    quincena.forEach((diaQuincena) => {
+      const entries: IServerTimeEntry[] = filter(serverEntries, {
+        spent_on: diaQuincena.fecha,
       });
       if (displayWeekends === true && entries.length === 0) {
-        tempEntries.push(addEmptyDay(element));
+        tempEntries.push(addEmptyDay(diaQuincena));
       } else if (
         entries.length === 0 &&
         displayWeekends === false &&
-        element.dia !== 0 &&
-        element.dia !== 6
+        diaQuincena.dia !== 0 &&
+        diaQuincena.dia !== 6
       ) {
-        tempEntries.push(addEmptyDay(element));
-      } else if (entries.length) {
-        const hours = entries.reduce((a, b) => a + b.hours, 0);
+        tempEntries.push(addEmptyDay(diaQuincena));
+      } else if (entries.length) {        
         entries.forEach((entry) => {
-          let newentry = {
-            id: "" + entry.id,
+          let newentry: ITimeEntry = {
+            id: entry.id,
             spent_on: entry.spent_on,
-            issue: entry.issue,
-            activity: entry.activity,
+            issueId:entry.issue.id,
+            issue: entry.issue.name,
+            activity: entry.activity.name,
             comments: entry.comments,
             hours: entry.hours,
-            turno: element,
-            empty: false,
-            totalhours: hours,
+            jornada: diaQuincena,
           };
           tempEntries.push(newentry);
         });
       }
     });
-
-    timeEntries = tempEntries;
+    
+    displayEntries = tempEntries;
   }
 
-  function handleModalOpen(event: Event, timeEntry: INewTimeEntry) {
+  function handleModalOpen(event: Event, timeEntry: ITimeEntry) {
     event.preventDefault();
-    modalData.turno = timeEntry.turno;
+    modalData.turno = timeEntry.jornada;
     const index: number = indexOf(holidays, modalData.turno.fecha);
-    modalWarning =
-      modalData.turno.dia === 0 || modalData.turno.dia === 6 || index >= 0;
-    if (timeEntry.empty && $templates.length === 0) {
-      modalData.entries.push(addEntry(timeEntry.turno.fecha));
-    } else if ($templates.length > 0 && timeEntry.empty) {
+    modalWarning = modalData.turno.dia === 0 || modalData.turno.dia === 6 || index >= 0;
+    if (timeEntry.id > 0 && $templates.length === 0) {
+      modalData.entries.push(addEmptyNewEntry(timeEntry.jornada));
+    } else if ($templates.length > 0 && timeEntry.id < 0) {
       modalData.entries = [];
       $templates.forEach((template: ITemplate) => {
-        modalData.entries.push({
-          id: template.id,
-          spent_on: timeEntry.turno.fecha,
-          issue: { id: template.issue, name: "" },
-          activity: { id: template.activity, name: "" },
+        modalData.entries.push({          
+          spent_on: timeEntry.jornada.fecha,
+          issue: template.issue,
+          activity: template.activity,
           comments: template.comments,
-          hours: template.hours,
-          empty: false,
+          hours: template.hours
         });
       });
     } else {
-      modalData.entries.push(addEntry(timeEntry.turno.fecha));
+      modalData.entries.push(addEmptyNewEntry(timeEntry.jornada));
     }
   }
 
-  function handleAddEmptyEntryInModal(event: Event, fecha: string) {
+  function handleAddEmptyEntryInModal(event: Event) {
     event.preventDefault();
     let tempEntries = Array.from(modalData.entries);
-    tempEntries.push(addEntry(fecha));
+    tempEntries.push(addEmptyNewEntry(modalData.turno));
     modalData.entries = tempEntries;
   }
 
-  function addEntry(fecha: string): INewTimeEntry {
-    const now = new Date();
+  function addEmptyNewEntry(turno: ITurno): INewTimeEntry {    
     return {
-      id: `${now.getFullYear()}${now.getMonth()}${now.getDay()}${now.getHours()}${now.getMinutes()}${now.getSeconds()}${now.getMilliseconds()}`,
-      spent_on: fecha,
-      issue: { id: -1, name: "No Hours registered" },
-      activity: { id: -1, name: "No Hours registered" },
+      spent_on: turno.fecha,
+      issue: 0,
+      activity: 0,
       comments: "",
-      hours: 0,
-      empty: false,
+      hours: 0
     };
   }
 
-  function addEmptyDay(turno: ITurno): INewTimeEntry {
-    const now = new Date();
+  function addEmptyDay(turno: ITurno): ITimeEntry {
+    
     return {
-      id: `${now.getFullYear()}${now.getMonth()}${now.getDay()}${now.getHours()}${now.getMinutes()}${now.getSeconds()}${now.getMilliseconds()}`,
+      id: -1,
       spent_on: turno.fecha,
-      issue: { id: -1, name: "No Hours registered" },
-      activity: { id: -1, name: "No Hours registered" },
+      issueId:0,
+      issue: "No Hours registered",
+      activity: "No Hours registered",
       comments: "No Hours registered",
       hours: 0,
-      turno: turno,
-      totalhours: 0,
-      empty: true,
+      jornada: turno,
     };
   }
 
@@ -194,7 +184,7 @@
       }
     });
     serverEntries = sortBy(tempServerEntries, ["spent_on", "id"]);
-    modalData = { turno: {} as ITurno, entries: new Array<INewTimeEntry>() };
+    modalData = { turno: {} as ITurno, entries: [] };
     refreshTable();
   }
 
@@ -216,13 +206,7 @@
       modalData.entries = tempEntries;
     }
   }
-
-  function calculateTotalHoursPerIssue(issue: IIssue) {
-    return sumBy(
-      filter(timeEntries, (o: INewTimeEntry) => o.issue.id == issue.id),
-      "hours"
-    );
-  }
+ 
 </script>
 
 <style>
@@ -253,16 +237,7 @@
   }
 </style>
 
-<div class="container">
-  <div class="row">
-    <div class="col">
-      {#each $issues as issue}
-        <h5>
-          Total de horas para {issue.project.name} : {calculateTotalHoursPerIssue(issue)}
-        </h5>
-      {/each}
-    </div>
-  </div>
+<div class="container"> 
   <div class="row">
     <div class="col">
       <table class="table table-sm table-hover">
@@ -288,16 +263,16 @@
           </tr>
         </thead>
         <tbody>
-          {#each timeEntries as timeEntry}
-            <tr class={timeEntry.turno.diaSemana.toLowerCase()}>
-              <td>{timeEntry.spent_on} {timeEntry.turno.diaSemana}</td>
-              <td>{timeEntry.activity.name}</td>
+          {#each displayEntries as timeEntry}
+            <tr class={timeEntry.jornada.diaSemana.toLowerCase()}>
+              <td>{timeEntry.spent_on} {timeEntry.jornada.diaSemana}</td>
+              <td>{timeEntry.activity}</td>
               <td>{timeEntry.comments}</td>
               <td>{timeEntry.hours}</td>
               <td>
                 <button
                   type="button"
-                  class="btn btn-sm {timeEntry.totalhours > 0 ? 'btn-primary' : 'btn-success'}"
+                  class="btn btn-sm {timeEntry.id < 0 ? 'btn-success' : 'btn-primary'}"
                   data-toggle="modal"
                   data-target="#timeEntriesForm"
                   on:click={(e) => handleModalOpen(e, timeEntry)}>
@@ -339,7 +314,7 @@
               <button
                 type="button"
                 class="btn btn-sm btn-info"
-                on:click={(e) => handleAddEmptyEntryInModal(e, modalData.turno.fecha)}>
+                on:click={(e) => handleAddEmptyEntryInModal(e)}>
                 <i class="fas fa-calendar-plus" />
                 Add empty entry
               </button>
@@ -354,7 +329,7 @@
               </tr>
             </thead>
             <tbody>
-              {#each modalData.entries as entry, index (entry.id)}
+              {#each modalData.entries as entry,index}
                 <tr>
                   <td>
                     <select
