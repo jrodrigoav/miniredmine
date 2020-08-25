@@ -45,5 +45,6 @@ jobs:
     steps:      
       - name: Publish Artifact
         run: dotnet publish --configuration Release --no-restore --output /Artifact
+        working-directory: ./MiniRedmine.Web
         
       
