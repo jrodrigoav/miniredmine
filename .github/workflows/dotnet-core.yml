@@ -39,12 +39,12 @@ jobs:
       - name: Publish frontend        
         run: npm run publish --if-present
         working-directory: ./MiniRedmine.Web/FrontEnd
-  publish-package:
-    runs-on: ubuntu-latest    
-    needs: [build-net,build-front]
-    steps:      
-      - name: Publish Artifact
-        run: dotnet publish --configuration Release --no-restore --output /Artifact
-        working-directory: ./MiniRedmine.Web
+#  publish-package:
+#    runs-on: ubuntu-latest    
+#    needs: [build-net,build-front]
+#    steps:      
+#      - name: Publish Artifact
+#        run: dotnet publish --configuration Release --no-restore --output /Artifact
+#        working-directory: ./MiniRedmine.Web
         
       
