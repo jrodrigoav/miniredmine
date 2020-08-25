@@ -8,12 +8,12 @@
   import { issues } from "../stores/issuestore";
   import { templates } from "../stores/templatestore";
   import { activities } from "../stores/activitystore";
-  import INewTimeEntry from "../interfaces/INewTimeEntry";
-  import ITimeEntry from "../interfaces/ITimeEntry";
-  import ITurno from "../interfaces/ITurno";
-  import IModalData from "../interfaces/IModalData";  
-  import ITemplate from "../interfaces/ITemplate";
-  import IServerTimeEntry from "../interfaces/IServerTimeEntry";
+  import type INewTimeEntry from "../interfaces/INewTimeEntry";
+  import type ITimeEntry from "../interfaces/ITimeEntry";
+  import type ITurno from "../interfaces/ITurno";
+  import type IModalData from "../interfaces/IModalData";  
+  import type ITemplate from "../interfaces/ITemplate";
+  import type IServerTimeEntry from "../interfaces/IServerTimeEntry";
 
   const holidays = [
     "2020-05-25",

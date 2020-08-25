@@ -1,4 +1,4 @@
-import ITurno from "./ITurno";
+import type ITurno from "./ITurno";
 
 export default interface ITimeEntry {
     id: number;

@@ -5,7 +5,7 @@
   import { templates } from "../stores/templatestore";
   import { activities } from "../stores/activitystore";
 
-  import ITemplate from "../interfaces/ITemplate";
+  import type ITemplate from "../interfaces/ITemplate";
 
   function handleSubmit(event:Event) {
     event.preventDefault();

@@ -1,5 +1,5 @@
-import IIdName from "./IIdName";
-import IActivity from "./IActivity";
+import type IIdName from "./IIdName";
+import type IActivity from "./IActivity";
 
 export default interface IServerTimeEntry{
     id:number;

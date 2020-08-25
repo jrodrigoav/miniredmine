@@ -1,14 +1,13 @@
 {
   "author": "Rodrigo Acedo <jrodrigoav@gmail.com>",
   "dependencies": {
-    "axios": "0.19.2",
-    "lodash": "4.17.19",
-    "moment": "2.26.0",
-    "svelte": "3.22.3"
+    "lodash": "4.17.20",
+    "moment": "2.27.0",
+    "svelte": "3.24.1"
   },
   "description": "MiniRedmine by JRAV",
   "devDependencies": {
-    "@tsconfig/svelte": "1.0.2",
+    "@tsconfig/svelte": "1.0.10",
     "@types/lodash": "4.14.108",
     "cross-env": "7.0.2",
     "css-loader": "3.6.0",

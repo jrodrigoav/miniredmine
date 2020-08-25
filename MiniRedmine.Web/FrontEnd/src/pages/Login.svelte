@@ -9,7 +9,7 @@
     user.register(await res.json());
     handleNavigation(null, "/");
   }
-  let userApiKey: string = null;
+  let userApiKey: string;
 </script>
 
 <div class="container">

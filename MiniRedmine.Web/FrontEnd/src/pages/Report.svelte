@@ -6,9 +6,9 @@
   import moment from "moment";
   import { user } from "../stores/userstore";
   import { issues } from "../stores/issuestore";
-  import IServerTimeEntry from "../interfaces/IServerTimeEntry";
-  import ITurno from "../interfaces/ITurno";
-  import IIssue from "../interfaces/IIssue";
+  import type IServerTimeEntry from "../interfaces/IServerTimeEntry";
+  import type ITurno from "../interfaces/ITurno";
+  import type IIssue from "../interfaces/IIssue";
 
   let quincena: ITurno[] = [];
   let serverEntries: IServerTimeEntry[];

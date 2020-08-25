@@ -1,7 +1,7 @@
 <script lang="typescript">
   import { issues } from "../stores/issuestore";
   import { user } from "../stores/userstore";
-  import IIssue from "../interfaces/IIssue";
+  import type IIssue from "../interfaces/IIssue";
   async function handleSubmit(event:Event) {
     event.preventDefault();
     let issueExists = false;

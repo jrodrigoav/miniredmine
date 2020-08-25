@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import IUser from '../interfaces/IUser';
+import type IUser from '../interfaces/IUser';
 
 const _REDMINE_USER = "REDMINE_USER";
 

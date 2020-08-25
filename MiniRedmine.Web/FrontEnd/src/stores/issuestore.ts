@@ -1,7 +1,7 @@
 const _REDMINE_USER_ISSUES = "REDMINE_USER_ISSUES";
 
 import { writable } from 'svelte/store';
-import IIssue from "../interfaces/IIssue";
+import type IIssue from "../interfaces/IIssue";
 
 function createIssuesStore() {
     const { subscribe, set, update } = writable<IIssue[]>(JSON.parse(localStorage.getItem(_REDMINE_USER_ISSUES) ?? '[]'));

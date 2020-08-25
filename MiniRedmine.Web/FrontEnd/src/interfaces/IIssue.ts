@@ -1,4 +1,4 @@
-import IIdName from "./IIdName";
+import type IIdName from "./IIdName";
 
 export default interface IIssue{
     id:number;
