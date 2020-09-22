@@ -2,8 +2,8 @@
   "author": "Rodrigo Acedo <jrodrigoav@gmail.com>",
   "dependencies": {
     "lodash": "4.17.20",
-    "moment": "2.27.0",
-    "svelte": "3.24.1"
+    "date-fns": "2.16.1",
+    "svelte": "3.25.1"
   },
   "description": "MiniRedmine by JRAV",
   "devDependencies": {
@@ -15,10 +15,10 @@
     "copy-webpack-plugin": "6.0.3",
     "html-webpack-plugin": "4.3.0",
     "mini-css-extract-plugin": "0.10.0",
-    "svelte-check": "1.0.22",
+    "svelte-check": "1.0.43",
     "style-loader": "1.2.1",
     "svelte-loader": "2.13.6",
-    "svelte-preprocess": "4.1.1",
+    "svelte-preprocess": "4.3.0",
     "ts-loader": "8.0.3",
     "typescript": "4.0.2",
     "webpack": "5.0.0-beta.22",
@@ -31,5 +31,5 @@
     "build": "cross-env NODE_ENV=development webpack --config config/webpack.dev.js",
     "publish": "cross-env NODE_ENV=production webpack --config config/webpack.prod.js"
   },
-  "version": "2.0.0"
+  "version": "2.1.0"
 }

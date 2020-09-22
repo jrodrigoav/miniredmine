@@ -1,9 +1,9 @@
 <script lang="typescript">
   import { onMount } from "svelte";
   import indexOf from "lodash/indexOf";
-  import filter from "lodash/filter";  
+  import filter from "lodash/filter";
   import sortBy from "lodash/sortBy";
-  import moment from "moment";
+  import { addDays, format, startOfMonth, endOfMonth } from "date-fns";
   import { user } from "../stores/userstore";
   import { issues } from "../stores/issuestore";
   import { templates } from "../stores/templatestore";
@@ -11,7 +11,7 @@
   import type INewTimeEntry from "../interfaces/INewTimeEntry";
   import type ITimeEntry from "../interfaces/ITimeEntry";
   import type ITurno from "../interfaces/ITurno";
-  import type IModalData from "../interfaces/IModalData";  
+  import type IModalData from "../interfaces/IModalData";
   import type ITemplate from "../interfaces/ITemplate";
   import type IServerTimeEntry from "../interfaces/IServerTimeEntry";
 
@@ -28,34 +28,34 @@
   let quincena: ITurno[] = [];
   let serverEntries: IServerTimeEntry[];
   let displayEntries: ITimeEntry[];
-  let displayWeekends = false;  
-  let modalWarning: boolean;  
+  let displayWeekends = false;
+  let modalWarning: boolean;
   $: modalWarning = false;
   $: displayEntries = [];
-  let modalData: IModalData;  
+  let modalData: IModalData;
   $: modalData = { turno: {} as ITurno, entries: [] };
 
   onMount(async () => {
-    const now = moment();
+    const now = new Date();
 
-    let from = null;
-    let to = null;
+    let from: Date;
+    let to: Date;
 
-    if (now.date() > 15) {
-      from = moment().year(now.year()).month(now.month()).date(16);
-      to = now.endOf("month");
+    if (now.getDate() > 15) {
+      from = new Date(now.getFullYear(), now.getMonth(), 16);
+      to = endOfMonth(now);
     } else {
-      from = now.startOf("month");
-      to = moment().year(now.year()).month(now.month()).date(15);
+      from = startOfMonth(now);
+      to = new Date(now.getFullYear(), now.getMonth(), 15);
     }
 
-    while (from.isSameOrBefore(to)) {
+    while (from <= to) {
       const turno: ITurno = {
-        fecha: from.format("YYYY-MM-DD"),
-        dia: from.day(),
-        diaSemana: from.format("dddd"),
+        fecha: format(from, "yyyy-MM-dd"),
+        dia: from.getDay(),
+        diaSemana: format(from, "dddd"),
       };
-      from.add(1, "days");
+      from = addDays(from, 1);
       quincena.push(turno);
     }
     //console.log(quincena);
@@ -92,12 +92,12 @@
         diaQuincena.dia !== 6
       ) {
         tempEntries.push(addEmptyDay(diaQuincena));
-      } else if (entries.length) {        
+      } else if (entries.length) {
         entries.forEach((entry) => {
           let newentry: ITimeEntry = {
             id: entry.id,
             spent_on: entry.spent_on,
-            issueId:entry.issue.id,
+            issueId: entry.issue.id,
             issue: entry.issue.name,
             activity: entry.activity.name,
             comments: entry.comments,
@@ -108,7 +108,7 @@
         });
       }
     });
-    
+
     displayEntries = tempEntries;
   }
 
@@ -116,18 +116,19 @@
     event.preventDefault();
     modalData.turno = timeEntry.jornada;
     const index: number = indexOf(holidays, modalData.turno.fecha);
-    modalWarning = modalData.turno.dia === 0 || modalData.turno.dia === 6 || index >= 0;
+    modalWarning =
+      modalData.turno.dia === 0 || modalData.turno.dia === 6 || index >= 0;
     if (timeEntry.id > 0 && $templates.length === 0) {
       modalData.entries.push(addEmptyNewEntry(timeEntry.jornada));
     } else if ($templates.length > 0 && timeEntry.id < 0) {
       modalData.entries = [];
       $templates.forEach((template: ITemplate) => {
-        modalData.entries.push({          
+        modalData.entries.push({
           spent_on: timeEntry.jornada.fecha,
           issue: template.issue,
           activity: template.activity,
           comments: template.comments,
-          hours: template.hours
+          hours: template.hours,
         });
       });
     } else {
@@ -142,22 +143,21 @@
     modalData.entries = tempEntries;
   }
 
-  function addEmptyNewEntry(turno: ITurno): INewTimeEntry {    
+  function addEmptyNewEntry(turno: ITurno): INewTimeEntry {
     return {
       spent_on: turno.fecha,
       issue: 0,
       activity: 0,
       comments: "",
-      hours: 0
+      hours: 0,
     };
   }
 
   function addEmptyDay(turno: ITurno): ITimeEntry {
-    
     return {
       id: -1,
       spent_on: turno.fecha,
-      issueId:0,
+      issueId: 0,
       issue: "No Hours registered",
       activity: "No Hours registered",
       comments: "No Hours registered",
@@ -206,7 +206,6 @@
       modalData.entries = tempEntries;
     }
   }
- 
 </script>
 
 <style>
@@ -237,7 +236,7 @@
   }
 </style>
 
-<div class="container"> 
+<div class="container">
   <div class="row">
     <div class="col">
       <table class="table table-sm table-hover">
@@ -297,7 +296,8 @@
       <div class="modal-content">
         <div class="modal-header {modalWarning ? 'bg-warning' : ''}">
           <h5 class="modal-title" id="timeEntriesFormTitle">
-            Register Time Entries for {modalData.turno.diaSemana} {modalData.turno.fecha}
+            Register Time Entries for {modalData.turno.diaSemana}
+            {modalData.turno.fecha}
           </h5>
           <button
             type="button"
@@ -315,8 +315,7 @@
                 type="button"
                 class="btn btn-sm btn-info"
                 on:click={(e) => handleAddEmptyEntryInModal(e)}>
-                <i class="fas fa-calendar-plus" />
-                Add empty entry
+                <i class="fas fa-calendar-plus" /> Add empty entry
               </button>
             </caption>
             <thead>
@@ -329,7 +328,7 @@
               </tr>
             </thead>
             <tbody>
-              {#each modalData.entries as entry,index}
+              {#each modalData.entries as entry, index}
                 <tr>
                   <td>
                     <select
@@ -339,7 +338,8 @@
                       <option value="" selected>--Select an issue--</option>
                       {#each $issues as issue (issue.id)}
                         <option value={issue.id}>
-                          {issue.id} {issue.project.name}
+                          {issue.id}
+                          {issue.project.name}
                         </option>
                       {/each}
                     </select>

@@ -3,7 +3,7 @@
   import filter from "lodash/filter";
   import sumBy from "lodash/sumBy";
   import sortBy from "lodash/sortBy";
-  import moment from "moment";
+  import { addDays, format, startOfMonth, endOfMonth } from "date-fns";
   import { user } from "../stores/userstore";
   import { issues } from "../stores/issuestore";
   import type IServerTimeEntry from "../interfaces/IServerTimeEntry";
@@ -16,29 +16,29 @@
   $: serverEntries = [];
 
   onMount(async () => {
-    const now = moment();
+    const now = new Date();
 
-    let from = null;
-    let to = null;
+    let from: Date;
+    let to: Date;
 
-    if (now.date() > 15) {
-      from = moment().year(now.year()).month(now.month()).date(16);
-      to = now.endOf("month");
+    if (now.getDate() > 15) {
+      from = new Date(now.getFullYear(), now.getMonth(), 16);
+      to = endOfMonth(now);
     } else {
-      from = now.startOf("month");
-      to = moment().year(now.year()).month(now.month()).date(15);
+      from = startOfMonth(now);
+      to = new Date(now.getFullYear(), now.getMonth(), 15);
     }
 
-    while (from.isSameOrBefore(to)) {
+    while (from <= to) {
       const turno: ITurno = {
-        fecha: from.format("YYYY-MM-DD"),
-        dia: from.day(),
-        diaSemana: from.format("dddd"),
+        fecha: format(from, "yyyy-MM-dd"),
+        dia: from.getDay(),
+        diaSemana: format(from, "dddd"),
       };
-      from.add(1, "days");
+      from = addDays(from, 1);
       quincena.push(turno);
     }
-    //console.log(quincena);
+    
     let tempServerEntries = await refreshTimeEntries();
     calculateTotalHoursPerIssue(tempServerEntries);
     serverEntries = tempServerEntries;

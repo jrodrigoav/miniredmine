@@ -1,7 +1,7 @@
 <script lang="ts">
-  import moment from "moment";
+  import {format} from "date-fns";
   import {user} from '../stores/userstore';
-  const lastLogin = moment($user.last_login_on).format("YYYY-MMM-DD HH:mm Z");  
+  const lastLogin = format($user.last_login_on, "yyyy-MMM-dd HH:mm Z");
 </script>
 <div class="container-fluid">
   <div class="row">
