@@ -4,10 +4,12 @@ import { writable } from 'svelte/store';
 import type IIssue from "../interfaces/IIssue";
 
 function createIssuesStore() {
-    const { subscribe, set, update } = writable<IIssue[]>(JSON.parse(localStorage.getItem(_REDMINE_USER_ISSUES) ?? '[]'));
+    const issues = localStorage.getItem(_REDMINE_USER_ISSUES) ?? '[]';
+    const jsonIssues = JSON.parse(issues);
+    const { subscribe, set, update } = writable<IIssue[]>(jsonIssues);
     return {
         subscribe,
-        updateIssues: (issues:IIssue[]) =>
+        updateIssues: (issues: IIssue[]) =>
             update(() => {
                 localStorage.setItem(_REDMINE_USER_ISSUES, JSON.stringify(issues));
                 return issues;

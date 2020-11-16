@@ -4,6 +4,6 @@ const app = new App({
 	target: document.body
 });
 
-window.app = app;
+window = Object.assign(window, { app: app });
 
 export default app;

@@ -4,7 +4,9 @@ import type IUser from '../interfaces/IUser';
 const _REDMINE_USER = "REDMINE_USER";
 
 function createUserStore() {
-    const { subscribe, set, update } = writable<IUser>(JSON.parse(localStorage.getItem(_REDMINE_USER)) ?? { unauthorized: true });
+    const user = localStorage.getItem(_REDMINE_USER) ?? '\{ \'unauthorized\': true \}';
+    const jsonUser = JSON.parse(user);
+    const { subscribe, set, update } = writable<IUser>(jsonUser);
     return {
         subscribe,
         register: (currentUser:IUser) => update(()=>{

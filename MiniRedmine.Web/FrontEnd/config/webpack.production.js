@@ -2,22 +2,25 @@
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const miniredmine2Entry = path.resolve(__dirname, "../src", "main.js");
+const TerserJSPlugin = require('terser-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+
+const miniredmine2Entry = path.resolve(__dirname, "../src", "main.ts");
 const indexHtml = path.resolve(__dirname, '../', 'index.html');
 const assetsSource = path.resolve(__dirname, "../assets");
 const distDirectory = path.resolve(__dirname, '../../wwwroot');
 
+
 module.exports = {
-    mode: 'development',
+    mode: 'production',
     devtool: 'source-map',
     entry: {
         main: miniredmine2Entry
     },
     output: {
         filename: 'js/[name].js?t=[hash:8]',
-        path: distDirectory,
-        publicPath: "/"
+        path: distDirectory
     },
     resolve: {
         alias: {
@@ -61,7 +64,9 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [
-                    'style-loader',
+                    {
+                        loader: MiniCssExtractPlugin.loader
+                    },
                     'css-loader'
                 ]
             }
@@ -70,7 +75,7 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin(),
         new MiniCssExtractPlugin({
-            filename: "[name].css"
+            filename: "css/[name].css?t=[hash:8]"
         }),
         new CopyWebpackPlugin({
             patterns: [{
@@ -81,5 +86,14 @@ module.exports = {
         new HtmlWebPackPlugin({
             template: indexHtml
         })
-    ]
+    ],
+    optimization: {
+        runtimeChunk: {
+            name: entrypoint => `runtime~${entrypoint.name}`
+        },
+        minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
+        splitChunks: {
+            chunks: 'all'
+        }
+    }
 };

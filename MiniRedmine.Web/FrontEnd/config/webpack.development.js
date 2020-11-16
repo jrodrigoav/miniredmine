@@ -1,41 +1,28 @@
 ﻿const path = require('path');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-
-const miniredmine2Entry = path.resolve(__dirname, "../src", "main.js");
+const miniredmine2Entry = path.resolve(__dirname, "../src", "main.ts");
 const indexHtml = path.resolve(__dirname, '../', 'index.html');
 const assetsSource = path.resolve(__dirname, "../assets");
 const distDirectory = path.resolve(__dirname, '../../wwwroot');
 
-
 module.exports = {
-    mode: 'production',
+    mode: 'development',
+    devtool: 'inline-source-map',
     entry: {
         main: miniredmine2Entry
-    },
-    output: {
-        filename: 'js/[name].js?t=[hash:8]',
-        path: distDirectory,
-        publicPath: "/"
-    },
-    resolve: {
-        alias: {
-            svelte: path.resolve('node_modules', 'svelte')
-        },
-        extensions: ['.mjs', '.js', '.ts', '.tsx', '.svelte'],
-        mainFields: ['svelte', 'browser', 'module', 'main']
     },
     module: {
         rules: [
             {
-                test: /\.tsx?$/,
+                test: /\.ts?$/,
                 use: 'ts-loader',
                 exclude: /node_modules/,
             },
             {
                 test: /\.svelte$/,
+                exclude: /node_modules/,
                 use: {
                     loader: 'svelte-loader',
                     options: {
@@ -45,7 +32,7 @@ module.exports = {
                             /* options */
                         })
                     }
-                }
+                }                
             },
             {
                 test: /.*\.(gif|png|jp(e*)g|svg)$/i,
@@ -62,20 +49,22 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {
-                        }
-                    },
+                    'style-loader',
                     'css-loader'
                 ]
             }
         ]
     },
-    plugins: [
-        new CleanWebpackPlugin(),
+    optimization: {
+        usedExports: true,
+    },
+    output: {
+        filename: 'js/[name].js?t=[hash:8]',
+        path: distDirectory
+    },
+    plugins: [        
         new MiniCssExtractPlugin({
-            filename: "css/[name].css?t=[hash:8]"
+            filename: "[name].css?t=[hash:8]"
         }),
         new CopyWebpackPlugin({
             patterns: [{
@@ -87,10 +76,11 @@ module.exports = {
             template: indexHtml
         })
     ],
-    optimization: {
-        splitChunks: {
-            chunks: 'all'
+    resolve: {
+        alias: {
+            svelte: path.resolve('node_modules', 'svelte')
         },
-        runtimeChunk: true
+        extensions: ['.mjs', '.js', '.ts', '.tsx', '.svelte'],
+        mainFields: ['svelte', 'browser', 'module', 'main']
     }
 };

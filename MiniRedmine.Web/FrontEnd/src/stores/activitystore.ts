@@ -4,7 +4,9 @@ import { writable } from 'svelte/store';
 import type IActivity from '../interfaces/IActivity';
 
 function createActivtiesStore() {
-    const { subscribe, set, update } = writable<IActivity[]>(JSON.parse(sessionStorage.getItem(_REDMINE_ACTIVITIES) ?? '[]'));
+    const activities = sessionStorage.getItem(_REDMINE_ACTIVITIES) ?? '[]';
+    const jsonActivities = JSON.parse(activities);
+    const { subscribe, set, update } = writable<IActivity[]>(jsonActivities);
    
     return {
         subscribe,
