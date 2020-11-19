@@ -1,7 +1,7 @@
 <script lang="ts">
-  import {format} from "date-fns";
+  import {format,parseISO} from "date-fns";
   import {user} from '../stores/userstore';
-  const lastLogin = format($user.last_login_on, "yyyy-MMM-dd HH:mm Z");
+  const lastLogin = format(parseISO($user.last_login_on), "yyyy-MMM-dd HH:mm");
 </script>
 <div class="container-fluid">
   <div class="row">
