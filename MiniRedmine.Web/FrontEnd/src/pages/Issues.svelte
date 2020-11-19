@@ -2,7 +2,7 @@
   import { issues } from "../stores/issuestore";
   import { user } from "../stores/userstore";
   import type IIssue from "../interfaces/IIssue";
-  async function handleSubmit(event:Event) {
+  async function handleSubmit(event: Event) {
     event.preventDefault();
     let issueExists = false;
     let tempIssues = Array.from($issues);
@@ -16,15 +16,17 @@
       const res = await fetch(
         `api/redmine/issue/${newIssue}?userApiKey=${$user.api_key}`
       );
-      tempIssues.push(await res.json());
-      issues.updateIssues(tempIssues);
+      if (res.ok === true) {
+        tempIssues.push(await res.json());
+        issues.updateIssues(tempIssues);
+      }
     }
   }
 
-  function handleRemove(event:Event, id:number) {
+  function handleRemove(event: Event, id: number) {
     event.preventDefault();
-    let deleteIndex:number = -1;
-    let tempIssues:IIssue[] = Array.from($issues);
+    let deleteIndex: number = -1;
+    let tempIssues: IIssue[] = Array.from($issues);
     for (let index = 0; index < tempIssues.length; index++) {
       const element = tempIssues[index];
       if (element.id === id) {

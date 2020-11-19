@@ -53,7 +53,7 @@
       const turno: ITurno = {
         fecha: format(from, "yyyy-MM-dd"),
         dia: from.getDay(),
-        diaSemana: format(from, "dddd"),
+        diaSemana: format(from, "EEE"),
       };
       from = addDays(from, 1);
       quincena.push(turno);
