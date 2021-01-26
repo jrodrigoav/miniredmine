@@ -19,6 +19,7 @@
 
   function routeTranslator(route: string): string {
     let result: string;
+    console.log(route);
     switch (route) {
       case "/login":
         result = "Login";

@@ -103,6 +103,7 @@
         entries.forEach((entry) => {
           let newentry: ITimeEntry = {
             id: entry.id,
+            project: entry.project.name,
             spent_on: entry.spent_on,
             issueId: entry.issue.id,
             issue: entry.issue.name,
@@ -156,7 +157,7 @@
       issue: 0,
       activity: 0,
       comments: "",
-      hours: 0,
+      hours: 0      
     };
   }
 
@@ -165,6 +166,7 @@
       id: -1,
       spent_on: turno.fecha,
       issueId: 0,
+      project:"",
       issue: "No Hours registered",
       activity: "No Hours registered",
       comments: "No Hours registered",
@@ -250,6 +252,7 @@
         <thead class="thead-dark">
           <tr>
             <th>Date</th>
+            <th>Project</th>
             <th>Activity</th>
             <th>Comments</th>
             <th>Hours</th>
@@ -272,6 +275,7 @@
           {#each displayEntries as timeEntry}
             <tr class={timeEntry.jornada.diaSemana.toLowerCase()}>
               <td>{timeEntry.spent_on} {timeEntry.jornada.diaSemana}</td>
+              <td>{timeEntry.project}</td>
               <td>{timeEntry.activity}</td>
               <td>{timeEntry.comments}</td>
               <td>{timeEntry.hours}</td>
