@@ -5,7 +5,7 @@
 
   async function handleSubmit(event:Event):Promise<void> {
     event.preventDefault();
-    const res = await fetch(`api/redmine/userinfo?userApiKey=${userApiKey}`);
+    const res = await fetch(`/api/redmine/userinfo?userApiKey=${userApiKey}`);
     user.register(await res.json());
     handleNavigation(null, "/");
   }

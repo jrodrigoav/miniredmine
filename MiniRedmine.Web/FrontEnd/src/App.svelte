@@ -8,6 +8,7 @@
   import Templates from "./pages/Templates.svelte";
   import TimeEntries from "./pages/TimeEntries.svelte";
   import Report from "./pages/Report.svelte";
+  import TLEReport from "./pages/TLEReport.svelte";
   import { user } from "./stores/userstore";
 
   function routeHandler(event: Event, route: string) {
@@ -22,20 +23,23 @@
       case "/login":
         result = "Login";
         break;
-      case "/profile":
+      case "/user/profile":
         result = "Profile";
         break;
-      case "/issues":
+      case "/user/issues":
         result = "Issues";
         break;
-      case "/templates":
+      case "/user/templates":
         result = "Templates";
         break;
-      case "/timeentries":
+      case "/user/timeentries":
         result = "Time Entries";
         break;
-        case "/report":
+      case "/user/report":
         result = "Time Card";
+        break;
+      case "/tle/report":
+        result = "Team Lead Report";
         break;
       default:
         result = "Index";
@@ -56,16 +60,18 @@
   <Index />
 {:else if currentRoute === '/login' && $user.unauthorized === true}
   <Login handleNavigation={routeHandler} />
-{:else if currentRoute === '/profile' && $user.unauthorized === undefined}
+{:else if currentRoute === '/user/profile' && $user.unauthorized === undefined}
   <Profile />
-{:else if currentRoute === '/issues' && $user.unauthorized === undefined}
+{:else if currentRoute === '/user/issues' && $user.unauthorized === undefined}
   <Issues />
-{:else if currentRoute === '/templates' && $user.unauthorized === undefined}
+{:else if currentRoute === '/user/templates' && $user.unauthorized === undefined}
   <Templates />
-{:else if currentRoute === '/timeentries' && $user.unauthorized === undefined}
+{:else if currentRoute === '/user/timeentries' && $user.unauthorized === undefined}
   <TimeEntries />
-{:else if currentRoute === '/report' && $user.unauthorized === undefined}
+{:else if currentRoute === '/user/report' && $user.unauthorized === undefined}
   <Report />
+{:else if currentRoute === '/tle/report' && $user.unauthorized === undefined}  
+  <TLEReport />
 {:else}
   <Index />
 {/if}

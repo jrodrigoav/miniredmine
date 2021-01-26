@@ -3,7 +3,10 @@
   import indexOf from "lodash/indexOf";
   import filter from "lodash/filter";
   import sortBy from "lodash/sortBy";
-  import { addDays, format, startOfMonth, endOfMonth } from "date-fns";
+  import addDays from 'date-fns/addDays';
+  import format from 'date-fns/format';
+  import startOfMonth from 'date-fns/startOfMonth';
+  import endOfMonth from 'date-fns/endOfMonth';
   import { user } from "../stores/userstore";
   import { issues } from "../stores/issuestore";
   import { templates } from "../stores/templatestore";
@@ -16,14 +19,18 @@
   import type IServerTimeEntry from "../interfaces/IServerTimeEntry";
 
   const holidays = [
-    "2020-05-25",
-    "2020-07-04",
-    "2020-09-07",
-    "2020-09-16",
-    "2020-10-12",
-    "2020-11-11",
-    "2020-11-26",
-    "2020-12-25",
+    "2021-01-01",
+    "2021-01-18",
+    "2021-02-15",
+    "2021-05-31",
+    "2021-07-04",
+    "2021-09-06",
+    "2021-09-16",
+    "2021-10-11",
+    "2021-11-11",
+    "2021-11-25",
+    "2021-12-25",
+    "2022-01-01"
   ];
   let quincena: ITurno[] = [];
   let serverEntries: IServerTimeEntry[];
@@ -70,7 +77,7 @@
       const from = quincena[0].fecha;
       const to = quincena[quincena.length - 1].fecha;
       const res = await fetch(
-        `api/redmine/timeentries?userApiKey=${$user.api_key}&userId=${$user.id}&from=${from}&to=${to}`
+        `/api/redmine/timeentries?userApiKey=${$user.api_key}&userId=${$user.id}&from=${from}&to=${to}`
       );
       serverEntries = sortBy(await res.json(), ["spent_on", "id"]);
       refreshTable();

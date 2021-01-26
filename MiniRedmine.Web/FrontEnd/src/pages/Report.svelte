@@ -3,7 +3,10 @@
   import filter from "lodash/filter";
   import sumBy from "lodash/sumBy";
   import sortBy from "lodash/sortBy";
-  import { addDays, format, startOfMonth, endOfMonth } from "date-fns";
+  import addDays from 'date-fns/addDays';
+  import format from 'date-fns/format';
+  import startOfMonth from 'date-fns/startOfMonth';
+  import endOfMonth from 'date-fns/endOfMonth';
   import { user } from "../stores/userstore";
   import { issues } from "../stores/issuestore";
   import type IServerTimeEntry from "../interfaces/IServerTimeEntry";
@@ -55,7 +58,7 @@
       const from = quincena[0].fecha;
       const to = quincena[quincena.length - 1].fecha;
       const res = await fetch(
-        `api/redmine/timeentries?userApiKey=${$user.api_key}&userId=${$user.id}&from=${from}&to=${to}`
+        `/api/redmine/timeentries?userApiKey=${$user.api_key}&userId=${$user.id}&from=${from}&to=${to}`
       );
       result = sortBy(await res.json(), ["spent_on", "id"]);
     }

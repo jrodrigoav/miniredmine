@@ -14,7 +14,7 @@
     }
     if (issueExists === false) {
       const res = await fetch(
-        `api/redmine/issue/${newIssue}?userApiKey=${$user.api_key}`
+        `/api/redmine/issue/${newIssue}?userApiKey=${$user.api_key}`
       );
       if (res.ok === true) {
         tempIssues.push(await res.json());

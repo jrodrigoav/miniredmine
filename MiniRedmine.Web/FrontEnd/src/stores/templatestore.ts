@@ -1,6 +1,6 @@
-const _REDMINE_USER_TEMPLATES = "REDMINE_USER_TEMPLATES";
 import { writable } from 'svelte/store';
 import type ITemplate from '../interfaces/ITemplate';
+const _REDMINE_USER_TEMPLATES = "REDMINE_USER_TEMPLATES";
 
 function createTemplatesStore() {
     const templates = localStorage.getItem(_REDMINE_USER_TEMPLATES) ?? '[]';

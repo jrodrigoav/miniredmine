@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using MiniRedmine.Web.Models;
 using MiniRedmine.Web.Models.Redmine;
 using MiniRedmine.Web.Services;
 using MiniRedmine.Web.ViewModels;
@@ -70,5 +72,9 @@ namespace MiniRedmine.Web.Controllers
             };
             return Created("", timeEntry);*/
         }
+
+        [HttpGet("leads")]
+        public IActionResult GetLeads([FromServices] IOptionsMonitor<UnosquareSettings> optionsMonitor) => Ok(optionsMonitor.CurrentValue);
+        
     }
 }
