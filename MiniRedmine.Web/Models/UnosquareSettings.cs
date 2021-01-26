@@ -2,10 +2,7 @@
 
 namespace MiniRedmine.Web.Models
 {
-    public class UnosquareSettings
-    {
-        public List<TeamLead> Leads { get; init; }
-    }
+    public class UnosquareLeads : List<TeamLead> { }
 
     public class TeamLead
     {

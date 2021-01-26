@@ -74,7 +74,7 @@ namespace MiniRedmine.Web.Controllers
         }
 
         [HttpGet("leads")]
-        public IActionResult GetLeads([FromServices] IOptionsMonitor<UnosquareSettings> optionsMonitor) => Ok(optionsMonitor.CurrentValue);
-        
+        public IActionResult GetLeads([FromServices] IOptionsMonitor<UnosquareLeads> optionsMonitor) => Ok(optionsMonitor.CurrentValue);
+
     }
 }
