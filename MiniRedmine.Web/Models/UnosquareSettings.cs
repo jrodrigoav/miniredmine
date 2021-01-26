@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace MiniRedmine.Web.Models
+﻿namespace MiniRedmine.Web.Models
 {
-    public class UnosquareLeads : List<int> { }
+    public class UnosquareSettings 
+    {
+        public string Leads { get; init; }
+    }
 }
