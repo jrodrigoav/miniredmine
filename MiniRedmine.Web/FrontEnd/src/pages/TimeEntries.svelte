@@ -179,7 +179,7 @@
     let tempServerEntries = Array.from(serverEntries);
     await asyncForEach(modalData.entries, async (element: INewTimeEntry) => {
       const res = await fetch(
-        `api/redmine/timeentries?userApiKey=${$user.api_key}`,
+        `/api/redmine/timeentries?userApiKey=${$user.api_key}`,
         {
           method: "POST",
           body: JSON.stringify(element),
