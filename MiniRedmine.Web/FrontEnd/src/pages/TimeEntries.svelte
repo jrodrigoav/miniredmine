@@ -120,8 +120,7 @@
     displayEntries = tempEntries;
   }
 
-  function handleModalOpen(event: Event, timeEntry: ITimeEntry) {
-    event.preventDefault();
+  function handleModalOpen(event: Event, timeEntry: ITimeEntry) {    
     modalData.turno = timeEntry.jornada;
     const index: number = indexOf(holidays, modalData.turno.fecha);
     modalWarning =
@@ -193,11 +192,13 @@
       }
     });
     serverEntries = sortBy(tempServerEntries, ["spent_on", "id"]);
+    let element = document.getElementById('timeEntriesForm');
+    element.setAttribute('class','modal');
     modalData = { turno: {} as ITurno, entries: [] };
     refreshTable();
   }
 
-  function handleModalClose() {
+  function handleModalClose() {    
     modalData = { turno: {} as ITurno, entries: new Array<INewTimeEntry>() };
   }
 
@@ -217,7 +218,7 @@
   }
 </script>
 
-<style>
+<style>  
   td {
     color: black;
     text-shadow: 1px 1px lightgrey;
@@ -282,9 +283,8 @@
               <td>
                 <button
                   type="button"
-                  class="btn btn-sm {timeEntry.id < 0 ? 'btn-success' : 'btn-primary'}"
-                  data-toggle="modal"
-                  data-target="#timeEntriesForm"
+                  class="btn btn-sm {timeEntry.id < 0 ? 'btn-success' : 'btn-primary'}" 
+                  data-bs-toggle="modal" data-bs-target="#timeEntriesForm"                 
                   on:click={(e) => handleModalOpen(e, timeEntry)}>
                   <i class="fas fa-calendar-plus" />
                 </button>
@@ -298,11 +298,8 @@
   <!-- Modal -->
   <div
     class="modal fade"
-    id="timeEntriesForm"
-    tabindex={-1}
-    role="dialog"
-    aria-labelledby="timeEntriesFormTitle"
-    aria-hidden="true">
+    data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"
+    id="timeEntriesForm">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header {modalWarning ? 'bg-warning' : ''}">
@@ -312,9 +309,8 @@
           </h5>
           <button
             type="button"
-            class="close"
-            data-dismiss="modal"
-            aria-label="Close"
+            class="btn btn-sm close"
+            data-bs-dismiss="modal" aria-label="Close"
             on:click={handleModalClose}>
             <span aria-hidden="true">&times;</span>
           </button>
@@ -400,14 +396,14 @@
           <button
             type="button"
             class="btn btn-secondary"
-            data-dismiss="modal"
+            data-bs-dismiss="modal"
             on:click={handleModalClose}>
             Close
           </button>
           <button
             type="button"
             class="btn btn-danger"
-            data-dismiss="modal"
+            data-bs-dismiss="modal"
             on:click={async () => await handleModalSave()}>
             Submit Time Entries
           </button>
