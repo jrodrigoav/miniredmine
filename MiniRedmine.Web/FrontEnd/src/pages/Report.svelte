@@ -58,7 +58,11 @@
       const from = quincena[0].fecha;
       const to = quincena[quincena.length - 1].fecha;
       const res = await fetch(
-        `/api/redmine/timeentries?userApiKey=${$user.api_key}&userId=${$user.id}&from=${from}&to=${to}`
+        `/api/redmine/timeentries?userId=${$user.id}&from=${from}&to=${to}`, {
+        headers: {
+          "Redmine-Key": `${$user.api_key}`,
+        }
+      }
       );
       result = sortBy(await res.json(), ["spent_on", "id"]);
     }

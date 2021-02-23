@@ -25,6 +25,16 @@ namespace MiniRedmine.Web
             services.AddControllers();
             services.AddSpaStaticFiles(configure => configure.RootPath = "wwwroot");
 
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost",
+                                            "https://miniremine.herokuapp.com");
+                    });
+            });
+
             services.Configure<UnosquareSettings>(Configuration.GetSection("UNOSQUARE"));
         }
 
@@ -35,7 +45,6 @@ namespace MiniRedmine.Web
             app.UseStatusCodePagesWithReExecute("/api/Error/{0}");
 
             app.UseSerilogRequestLogging();
-
 
             app.UseDefaultFiles(new DefaultFilesOptions
             {
@@ -53,6 +62,7 @@ namespace MiniRedmine.Web
             });
 
             app.UseRouting();
+            app.UseCors();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
             app.UseSpa(options => options.Options.DefaultPage = new Microsoft.AspNetCore.Http.PathString("/index.html"));
         }

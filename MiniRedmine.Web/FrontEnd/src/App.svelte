@@ -6,6 +6,7 @@
   import Profile from "./pages/Profile.svelte";
   import Issues from "./pages/Issues.svelte";
   import Templates from "./pages/Templates.svelte";
+  import TeamMembers from "./pages/TeamMembers.svelte";
   import TimeEntries from "./pages/TimeEntries.svelte";
   import Report from "./pages/Report.svelte";
   import TLEReport from "./pages/TLEReport.svelte";
@@ -19,7 +20,7 @@
 
   function routeTranslator(route: string): string {
     let result: string;
-    
+
     switch (route) {
       case "/login":
         result = "Login";
@@ -32,6 +33,9 @@
         break;
       case "/user/templates":
         result = "Templates";
+        break;
+      case "/tle/teammembers":
+        result = "Team Members";
         break;
       case "/user/timeentries":
         result = "Time Entries";
@@ -48,30 +52,43 @@
     }
     return result;
   }
+  let leadIds: Array<Number>;
   let currentRoute: string;
+  let isLead: boolean;
   $: currentRoute = "/";
+  $: leadIds = [];
+  $: isLead = false;
 
-  onMount(() => {
+  onMount(async () => {
     routeHandler(null, window.location.pathname);
+    const res = await fetch("/api/redmine/leads");
+    if (res.ok === true) {
+      leadIds = JSON.parse(await res.text());
+    }
+    if (leadIds.find((i) => i === $user.id)) {
+      isLead = true;
+    }
   });
 </script>
 
-<Header handleNavigation={routeHandler} />
-{#if currentRoute === '/'}
+<Header handleNavigation={routeHandler} {isLead} />
+{#if currentRoute === "/"}
   <Index />
-{:else if currentRoute === '/login' && $user.unauthorized === true}
+{:else if currentRoute === "/login" && $user.unauthorized === true}
   <Login handleNavigation={routeHandler} />
-{:else if currentRoute === '/user/profile' && $user.unauthorized === undefined}
+{:else if currentRoute === "/user/profile" && $user.unauthorized === undefined}
   <Profile />
-{:else if currentRoute === '/user/issues' && $user.unauthorized === undefined}
+{:else if currentRoute === "/user/issues" && $user.unauthorized === undefined}
   <Issues />
-{:else if currentRoute === '/user/templates' && $user.unauthorized === undefined}
+{:else if currentRoute === "/user/templates" && $user.unauthorized === undefined}
   <Templates />
-{:else if currentRoute === '/user/timeentries' && $user.unauthorized === undefined}
+{:else if currentRoute === "/tle/teammembers" && isLead === true}
+  <TeamMembers />
+{:else if currentRoute === "/user/timeentries" && $user.unauthorized === undefined}
   <TimeEntries />
-{:else if currentRoute === '/user/report' && $user.unauthorized === undefined}
+{:else if currentRoute === "/user/report" && $user.unauthorized === undefined}
   <Report />
-{:else if currentRoute === '/tle/report' && $user.unauthorized === undefined}  
+{:else if currentRoute === "/tle/report" && $user.unauthorized === undefined}
   <TLEReport />
 {:else}
   <Index />

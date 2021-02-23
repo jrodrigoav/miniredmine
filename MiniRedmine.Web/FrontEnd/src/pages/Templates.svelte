@@ -7,7 +7,7 @@
 
   import type ITemplate from "../interfaces/ITemplate";
 
-  function handleSubmit(event:Event) {
+  function handleSubmit(event: Event) {
     event.preventDefault();
     let tempTemplates = Array.from($templates);
     tempTemplates.push(newtemplate);
@@ -70,9 +70,11 @@
 
   onMount(async () => {
     if ($user.unauthorized === undefined && $activities.length === 0) {
-      const res = await fetch(
-        `/api/redmine/timeentryactivities?userApiKey=${$user.api_key}`
-      );
+      const res = await fetch(`/api/redmine/timeentryactivities`, {
+        headers: {
+          "Redmine-Key": `${$user.api_key}`,
+        },
+      });
       const tempActivities = await res.json();
       activities.updateActivities(tempActivities);
     }
@@ -88,10 +90,13 @@
           <select
             bind:value={newtemplate.issue}
             class="form-control"
-            name="Issue">
+            name="Issue"
+          >
             <option value="" selected>--Select an issue--</option>
             {#each $issues as issue (issue.id)}
-              <option value={issue.id}>{issue.id} - {issue.project.name} - {issue.subject}</option>
+              <option value={issue.id}
+                >{issue.id} - {issue.project.name} - {issue.subject}</option
+              >
             {/each}
           </select>
         </div>
@@ -100,7 +105,8 @@
           <select
             bind:value={newtemplate.activity}
             class="form-control"
-            name="Activity">
+            name="Activity"
+          >
             <option value="" selected>--Select an activity--</option>
             {#each $activities as activity (activity.id)}
               <option value={activity.id}>{activity.name}</option>
@@ -113,7 +119,8 @@
             type="text"
             bind:value={newtemplate.comments}
             class="form-control"
-            placeholder="Comments" />
+            placeholder="Comments"
+          />
         </div>
         <div class="form-group">
           <label for="Hours">Hours</label>
@@ -124,7 +131,8 @@
             step="0.5"
             bind:value={newtemplate.hours}
             class="form-control"
-            placeholder="Hours" />
+            placeholder="Hours"
+          />
         </div>
         <button type="submit" class="btn btn-sm btn-success">
           <i class="fas fa-plus-circle" />
@@ -158,7 +166,8 @@
                 <button
                   type="button"
                   class="btn btn-sm btn-danger"
-                  on:click={(e) => handleRemove(e, template.id)}>
+                  on:click={(e) => handleRemove(e, template.id)}
+                >
                   <i class="fas fa-trash" />
                 </button>
               </td>
