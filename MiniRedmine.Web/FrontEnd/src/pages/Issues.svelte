@@ -13,9 +13,11 @@
       }
     }
     if (issueExists === false) {
-      const res = await fetch(
-        `api/redmine/issue/${newIssue}?userApiKey=${$user.api_key}`
-      );
+      const res = await fetch(`/api/redmine/issue/${newIssue}`, {
+        headers: {
+          "Redmine-Key": `${$user.api_key}`,
+        }
+      });
       if (res.ok === true) {
         tempIssues.push(await res.json());
         issues.updateIssues(tempIssues);
@@ -51,7 +53,8 @@
           min="1"
           max="9999999"
           class="form-control"
-          bind:value={newIssue} />
+          bind:value={newIssue}
+        />
         <button type="submit" class="btn btn-sm btn-success">
           <i class="fas fa-plus-circle" />
         </button>
@@ -77,7 +80,8 @@
                 <button
                   type="button"
                   class="btn btn-sm btn-danger"
-                  on:click={(e) => handleRemove(e, issue.id)}>
+                  on:click={(e) => handleRemove(e, issue.id)}
+                >
                   <i class="fas fa-trash" />
                 </button>
               </td>

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MiniRedmine.Web.Models;
 using MiniRedmine.Web.Services;
 using Serilog;
 using System.Collections.Generic;
@@ -23,6 +24,18 @@ namespace MiniRedmine.Web
             services.AddHttpClient<RedmineHttpService>(configureClient => configureClient.BaseAddress = new System.Uri("https://dev.unosquare.com/redmine/"));
             services.AddControllers();
             services.AddSpaStaticFiles(configure => configure.RootPath = "wwwroot");
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost",
+                                            "https://miniremine.herokuapp.com");
+                    });
+            });
+
+            services.Configure<UnosquareSettings>(Configuration.GetSection("UNOSQUARE"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -32,7 +45,6 @@ namespace MiniRedmine.Web
             app.UseStatusCodePagesWithReExecute("/api/Error/{0}");
 
             app.UseSerilogRequestLogging();
-
 
             app.UseDefaultFiles(new DefaultFilesOptions
             {
@@ -50,6 +62,7 @@ namespace MiniRedmine.Web
             });
 
             app.UseRouting();
+            app.UseCors();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
             app.UseSpa(options => options.Options.DefaultPage = new Microsoft.AspNetCore.Http.PathString("/index.html"));
         }

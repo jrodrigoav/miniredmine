@@ -3,7 +3,10 @@
   import indexOf from "lodash/indexOf";
   import filter from "lodash/filter";
   import sortBy from "lodash/sortBy";
-  import { addDays, format, startOfMonth, endOfMonth } from "date-fns";
+  import addDays from "date-fns/addDays";
+  import format from "date-fns/format";
+  import startOfMonth from "date-fns/startOfMonth";
+  import endOfMonth from "date-fns/endOfMonth";
   import { user } from "../stores/userstore";
   import { issues } from "../stores/issuestore";
   import { templates } from "../stores/templatestore";
@@ -16,14 +19,18 @@
   import type IServerTimeEntry from "../interfaces/IServerTimeEntry";
 
   const holidays = [
-    "2020-05-25",
-    "2020-07-04",
-    "2020-09-07",
-    "2020-09-16",
-    "2020-10-12",
-    "2020-11-11",
-    "2020-11-26",
-    "2020-12-25",
+    "2021-01-01",
+    "2021-01-18",
+    "2021-02-15",
+    "2021-05-31",
+    "2021-07-04",
+    "2021-09-06",
+    "2021-09-16",
+    "2021-10-11",
+    "2021-11-11",
+    "2021-11-25",
+    "2021-12-25",
+    "2022-01-01",
   ];
   let quincena: ITurno[] = [];
   let serverEntries: IServerTimeEntry[];
@@ -58,7 +65,15 @@
       from = addDays(from, 1);
       quincena.push(turno);
     }
-    //console.log(quincena);
+    if ($user.unauthorized === undefined && $activities.length === 0) {
+      const res = await fetch(`/api/redmine/timeentryactivities`, {
+        headers: {
+          "Redmine-Key": `${$user.api_key}`,
+        },
+      });
+      const tempActivities = await res.json();
+      activities.updateActivities(tempActivities);
+    }
     await refreshTimeEntries();
   });
 
@@ -70,7 +85,12 @@
       const from = quincena[0].fecha;
       const to = quincena[quincena.length - 1].fecha;
       const res = await fetch(
-        `api/redmine/timeentries?userApiKey=${$user.api_key}&userId=${$user.id}&from=${from}&to=${to}`
+        `/api/redmine/timeentries?userId=${$user.id}&from=${from}&to=${to}`,
+        {
+          headers: {
+            "Redmine-Key": `${$user.api_key}`,
+          },
+        }
       );
       serverEntries = sortBy(await res.json(), ["spent_on", "id"]);
       refreshTable();
@@ -96,6 +116,7 @@
         entries.forEach((entry) => {
           let newentry: ITimeEntry = {
             id: entry.id,
+            project: entry.project.name,
             spent_on: entry.spent_on,
             issueId: entry.issue.id,
             issue: entry.issue.name,
@@ -112,8 +133,7 @@
     displayEntries = tempEntries;
   }
 
-  function handleModalOpen(event: Event, timeEntry: ITimeEntry) {
-    event.preventDefault();
+  function handleModalOpen(timeEntry: ITimeEntry) {
     modalData.turno = timeEntry.jornada;
     const index: number = indexOf(holidays, modalData.turno.fecha);
     modalWarning =
@@ -158,6 +178,7 @@
       id: -1,
       spent_on: turno.fecha,
       issueId: 0,
+      project: "",
       issue: "No Hours registered",
       activity: "No Hours registered",
       comments: "No Hours registered",
@@ -169,21 +190,21 @@
   async function handleModalSave() {
     let tempServerEntries = Array.from(serverEntries);
     await asyncForEach(modalData.entries, async (element: INewTimeEntry) => {
-      const res = await fetch(
-        `api/redmine/timeentries?userApiKey=${$user.api_key}`,
-        {
-          method: "POST",
-          body: JSON.stringify(element),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const res = await fetch("/api/redmine/timeentries", {
+        method: "POST",
+        body: JSON.stringify(element),
+        headers: {
+          "Content-Type": "application/json",
+          "Redmine-Key": `${$user.api_key}`,
+        },
+      });
       if (res.ok === true) {
         tempServerEntries.push(await res.json());
       }
     });
     serverEntries = sortBy(tempServerEntries, ["spent_on", "id"]);
+    let element = document.getElementById("timeEntriesForm");
+    element.setAttribute("class", "modal");
     modalData = { turno: {} as ITurno, entries: [] };
     refreshTable();
   }
@@ -207,6 +228,193 @@
     }
   }
 </script>
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <table class="table table-sm table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th>Date</th>
+            <th>Project</th>
+            <th>Activity</th>
+            <th>Comments</th>
+            <th>Hours</th>
+            <th>
+              <div class="form-group form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="displayWeekends"
+                  bind:checked={displayWeekends}
+                  on:change={refreshTable}
+                />
+                <label class="form-check-label" for="displayWeekends">
+                  Display Weekends
+                </label>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {#each displayEntries as timeEntry}
+            <tr class={timeEntry.jornada.diaSemana.toLowerCase()}>
+              <td>{timeEntry.spent_on} {timeEntry.jornada.diaSemana}</td>
+              <td>{timeEntry.project}</td>
+              <td>{timeEntry.activity}</td>
+              <td>{timeEntry.comments}</td>
+              <td>{timeEntry.hours}</td>
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-sm {timeEntry.id < 0
+                    ? 'btn-success'
+                    : 'btn-primary'}"
+                  data-bs-toggle="modal"
+                  data-bs-target="#timeEntriesForm"
+                  on:click={() => handleModalOpen(timeEntry)}
+                >
+                  <i class="fas fa-calendar-plus" />
+                </button>
+              </td>
+            </tr>
+          {/each}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- Modal -->
+  <div
+    class="modal fade"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+    id="timeEntriesForm"
+  >
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header {modalWarning ? 'bg-warning' : ''}">
+          <h5 class="modal-title" id="timeEntriesFormTitle">
+            Register Time Entries for {modalData.turno.diaSemana}
+            {modalData.turno.fecha}
+          </h5>
+          <button
+            type="button"
+            class="btn btn-sm close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            on:click={handleModalClose}
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <table>
+            <caption>
+              <button
+                type="button"
+                class="btn btn-sm btn-info"
+                on:click={(e) => handleAddEmptyEntryInModal(e)}
+              >
+                <i class="fas fa-calendar-plus" /> Add empty entry
+              </button>
+            </caption>
+            <thead>
+              <tr>
+                <th>Issue</th>
+                <th>Activity</th>
+                <th>Comments</th>
+                <th>Hours</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              {#each modalData.entries as entry, index}
+                <tr>
+                  <td>
+                    <select
+                      bind:value={entry.issue}
+                      class="form-control"
+                      name="Issue"
+                    >
+                      <option value="" selected>--Select an issue--</option>
+                      {#each $issues as issue (issue.id)}
+                        <option value={issue.id}>
+                          {issue.id}
+                          {issue.project.name}
+                        </option>
+                      {/each}
+                    </select>
+                  </td>
+                  <td>
+                    <select
+                      bind:value={entry.activity}
+                      class="form-control"
+                      name="Activity"
+                    >
+                      <option value="" selected>--Select an activity--</option>
+                      {#each $activities as activity (activity.id)}
+                        <option value={activity.id}>{activity.name}</option>
+                      {/each}
+                    </select>
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      bind:value={entry.comments}
+                      class="form-control"
+                      placeholder="Comments"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      min="0.0"
+                      max="24.0"
+                      step="0.5"
+                      bind:value={entry.hours}
+                      class="form-control"
+                      placeholder="Hours"
+                    />
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-danger"
+                      on:click={(e) => removeModalEntry(e, index)}
+                    >
+                      <i class="fas fa-trash" />
+                    </button>
+                  </td>
+                </tr>
+              {/each}
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+            on:click={handleModalClose}
+          >
+            Close
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            data-bs-dismiss="modal"
+            on:click={async () => await handleModalSave()}
+          >
+            Submit Time Entries
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <style>
   td {
@@ -235,173 +443,3 @@
     background-color: coral;
   }
 </style>
-
-<div class="container">
-  <div class="row">
-    <div class="col">
-      <table class="table table-sm table-hover">
-        <thead class="thead-dark">
-          <tr>
-            <th>Date</th>
-            <th>Activity</th>
-            <th>Comments</th>
-            <th>Hours</th>
-            <th>
-              <div class="form-group form-check">
-                <input
-                  type="checkbox"
-                  class="form-check-input"
-                  id="displayWeekends"
-                  bind:checked={displayWeekends}
-                  on:change={refreshTable} />
-                <label class="form-check-label" for="displayWeekends">
-                  Display Weekends
-                </label>
-              </div>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {#each displayEntries as timeEntry}
-            <tr class={timeEntry.jornada.diaSemana.toLowerCase()}>
-              <td>{timeEntry.spent_on} {timeEntry.jornada.diaSemana}</td>
-              <td>{timeEntry.activity}</td>
-              <td>{timeEntry.comments}</td>
-              <td>{timeEntry.hours}</td>
-              <td>
-                <button
-                  type="button"
-                  class="btn btn-sm {timeEntry.id < 0 ? 'btn-success' : 'btn-primary'}"
-                  data-toggle="modal"
-                  data-target="#timeEntriesForm"
-                  on:click={(e) => handleModalOpen(e, timeEntry)}>
-                  <i class="fas fa-calendar-plus" />
-                </button>
-              </td>
-            </tr>
-          {/each}
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <!-- Modal -->
-  <div
-    class="modal fade"
-    id="timeEntriesForm"
-    tabindex={-1}
-    role="dialog"
-    aria-labelledby="timeEntriesFormTitle"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header {modalWarning ? 'bg-warning' : ''}">
-          <h5 class="modal-title" id="timeEntriesFormTitle">
-            Register Time Entries for {modalData.turno.diaSemana}
-            {modalData.turno.fecha}
-          </h5>
-          <button
-            type="button"
-            class="close"
-            data-dismiss="modal"
-            aria-label="Close"
-            on:click={handleModalClose}>
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <table>
-            <caption>
-              <button
-                type="button"
-                class="btn btn-sm btn-info"
-                on:click={(e) => handleAddEmptyEntryInModal(e)}>
-                <i class="fas fa-calendar-plus" /> Add empty entry
-              </button>
-            </caption>
-            <thead>
-              <tr>
-                <th>Issue</th>
-                <th>Activity</th>
-                <th>Comments</th>
-                <th>Hours</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {#each modalData.entries as entry, index}
-                <tr>
-                  <td>
-                    <select
-                      bind:value={entry.issue}
-                      class="form-control"
-                      name="Issue">
-                      <option value="" selected>--Select an issue--</option>
-                      {#each $issues as issue (issue.id)}
-                        <option value={issue.id}>
-                          {issue.id}
-                          {issue.project.name}
-                        </option>
-                      {/each}
-                    </select>
-                  </td>
-                  <td>
-                    <select
-                      bind:value={entry.activity}
-                      class="form-control"
-                      name="Activity">
-                      <option value="" selected>--Select an activity--</option>
-                      {#each $activities as activity (activity.id)}
-                        <option value={activity.id}>{activity.name}</option>
-                      {/each}
-                    </select>
-                  </td>
-                  <td>
-                    <input
-                      type="text"
-                      bind:value={entry.comments}
-                      class="form-control"
-                      placeholder="Comments" />
-                  </td>
-                  <td>
-                    <input
-                      type="number"
-                      min="0.0"
-                      max="24.0"
-                      step="0.5"
-                      bind:value={entry.hours}
-                      class="form-control"
-                      placeholder="Hours" />
-                  </td>
-                  <td>
-                    <button
-                      type="button"
-                      class="btn btn-sm btn-danger"
-                      on:click={(e) => removeModalEntry(e, index)}>
-                      <i class="fas fa-trash" />
-                    </button>
-                  </td>
-                </tr>
-              {/each}
-            </tbody>
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-dismiss="modal"
-            on:click={handleModalClose}>
-            Close
-          </button>
-          <button
-            type="button"
-            class="btn btn-danger"
-            data-dismiss="modal"
-            on:click={async () => await handleModalSave()}>
-            Submit Time Entries
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>

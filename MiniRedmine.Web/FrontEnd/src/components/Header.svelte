@@ -1,20 +1,14 @@
 ﻿<script lang="typescript">
   import { user } from "../stores/userstore";
-  export let handleNavigation: Function;  
+  export let handleNavigation: Function; 
+  export let isLead:boolean;
 </script>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-3">
-  <a class="navbar-brand" href="/" on:click={(e) => handleNavigation(e, '/')}>
+  <a class="navbar-brand" href="/" on:click={(e) => handleNavigation(e, "/")}>
     Mini Redmine 2
   </a>
-  <button
-    class="navbar-toggler"
-    type="button"
-    data-toggle="collapse"
-    data-target="#mainnavbar"
-    aria-controls="mainnavbar"
-    aria-expanded="false"
-    aria-label="Toggle navigation">
+  <button class="navbar-toggler"  type="button" data-bs-toggle="collapse" data-bs-target="#mainnavbar" aria-controls="mainnavbar" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon" />
   </button>
   <div class="collapse navbar-collapse" id="mainnavbar">
@@ -24,49 +18,83 @@
           <a
             class="nav-link"
             href="/login"
-            on:click={(e) => handleNavigation(e, '/login')}>
+            on:click={(e) => handleNavigation(e, "/login")}
+          >
             Login
           </a>
         </li>
       {:else}
-        <li class="nav-item">
+        <li class="nav-item dropdown">
           <a
-            class="nav-link"
-            href="/profile"
-            on:click={(e) => handleNavigation(e, '/profile')}>
-            Profile
+            class="nav-link dropdown-toggle"
+            id="navbarUser"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            User Menu
           </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarUser">
+            <li>
+              <a
+                class="dropdown-item"
+                href="/user/profile"
+                on:click={(e) => handleNavigation(e, "/user/profile")}
+                >Profile</a
+              >
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                href="/user/issues"
+                on:click={(e) => handleNavigation(e, "/user/issues")}>Issues</a
+              >
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                href="/user/templates"
+                on:click={(e) => handleNavigation(e, "/user/templates")}
+                >Templates</a
+              >
+            </li>
+            {#if isLead === true}
+            <li>
+              <a
+                class="dropdown-item"
+                href="/tle/teammembers"
+                on:click={(e) => handleNavigation(e, "/tle/teammembers")}
+                >Team Members</a
+              >
+            </li>       
+            {/if}
+          </ul>
         </li>
         <li class="nav-item">
           <a
             class="nav-link"
-            href="/issues"
-            on:click={(e) => handleNavigation(e, '/issues')}>
-            Issues
-          </a>
-        </li>
-        <li class="nav-item">
-          <a
-            class="nav-link"
-            href="/templates"
-            on:click={(e) => handleNavigation(e, '/templates')}>
-            Templates
-          </a>
-        </li>
-        <li class="nav-item">
-          <a
-            class="nav-link"
-            href="/timeentries"
-            on:click={(e) => handleNavigation(e, '/timeentries')}>
+            href="/user/timeentries"
+            on:click={(e) => handleNavigation(e, "/user/timeentries")}
+          >
             Time Entries
           </a>
         </li>
         <li class="nav-item">
           <a
             class="nav-link"
-            href="/report"
-            on:click={(e) => handleNavigation(e, '/report')}>
+            href="/user/report"
+            on:click={(e) => handleNavigation(e, "/user/report")}
+          >
             Report
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            href="/tle/report"
+            on:click={(e) => handleNavigation(e, "/tle/report")}
+          >
+            TLE Report
           </a>
         </li>
       {/if}
