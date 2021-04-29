@@ -27,7 +27,18 @@
     <meta name="theme-color" content="#ffffff">
     <title>Mini Redmine Svelte</title>
     <script src="https://cdn.lr-ingest.io/LogRocket.min.js" crossorigin="anonymous"></script>
-    <script>window.LogRocket && window.LogRocket.init('8rjovz/miniredmine-prod');</script>
+    <script>window.LogRocket && window.LogRocket.init('8rjovz/miniredmine-prod', {
+            network: {
+                requestSanitizer: request => {
+                    // scrub header value from request
+                    if (request.headers['Redmine-Key']) {
+                        request.headers['Redmine-Key'] = '';
+                    }
+                    // make sure you return the modified request
+                    return request;
+                },
+            },
+        });</script>
 </head>
 
 <body>
@@ -37,6 +48,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js"
         integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG"
         crossorigin="anonymous"></script>
+    <script>
+        const user = JSON.parse(localStorage.getItem("REDMINE_USER") ?? JSON.stringify({ unauthorized: true }));
+        if (user.id > 0) {
+            LogRocket.identify(user.id, {
+                name: user.firstname,
+                email: user.login
+            });
+        }
+    </script>
 </body>
 
 </html>
