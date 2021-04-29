@@ -10,7 +10,7 @@ function createUserStore() {
     return {
         subscribe,
         register: (currentUser:IUser) => update(()=>{
-            localStorage.setItem(_REDMINE_USER, JSON.stringify(currentUser));
+            localStorage.setItem(_REDMINE_USER, JSON.stringify(currentUser));            
             return currentUser;
         })        
     }
