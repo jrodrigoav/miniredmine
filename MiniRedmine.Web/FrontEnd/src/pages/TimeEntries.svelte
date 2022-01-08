@@ -1,4 +1,4 @@
-<script lang="typescript">
+<script lang="ts">
   import { onMount } from "svelte";
   import indexOf from "lodash/indexOf";
   import filter from "lodash/filter";
@@ -19,18 +19,10 @@
   import type IServerTimeEntry from "../interfaces/IServerTimeEntry";
 
   const holidays = [
-    "2021-01-01",
-    "2021-01-18",
-    "2021-02-15",
-    "2021-05-31",
-    "2021-07-04",
-    "2021-09-06",
-    "2021-09-16",
-    "2021-10-11",
-    "2021-11-11",
-    "2021-11-25",
-    "2021-12-25",
     "2022-01-01",
+    "2022-01-17",
+    "2022-02-14",
+    "2022-05-30"
   ];
   let quincena: ITurno[] = [];
   let serverEntries: IServerTimeEntry[];

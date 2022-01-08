@@ -1,4 +1,4 @@
-<script lang="typescript">
+<script lang="ts">
   import { onMount } from "svelte";
   import format from "date-fns/format";
   import startOfMonth from "date-fns/startOfMonth";

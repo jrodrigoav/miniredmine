@@ -1,4 +1,4 @@
-<script lang="typescript">
+<script lang="ts">
   import { issues } from "../stores/issuestore";
   import { user } from "../stores/userstore";
   import type IIssue from "../interfaces/IIssue";

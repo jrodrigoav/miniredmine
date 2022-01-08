@@ -1,4 +1,4 @@
-<script lang="typescript">
+<script lang="ts">
   import { teamMembers } from "../stores/teammemberstore";
   let newTeamMember: number = 0;
 
@@ -47,7 +47,7 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>Member Id</th>            
+            <th>Member Id</th>
             <th />
           </tr>
         </thead>

@@ -93,3 +93,6 @@
 {:else}
   <Index />
 {/if}
+<footer>
+  Copyright &copy; Jesus Acedo 2018 - 2022 version: 2.3.0
+</footer>
