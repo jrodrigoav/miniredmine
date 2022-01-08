@@ -1,4 +1,4 @@
-<script lang="typescript">
+<script lang="ts">
   import { onMount } from "svelte";
   import filter from "lodash/filter";
   import sumBy from "lodash/sumBy";
@@ -41,7 +41,7 @@
       from = addDays(from, 1);
       quincena.push(turno);
     }
-    
+
     let tempServerEntries = await refreshTimeEntries();
     calculateTotalHoursPerIssue(tempServerEntries);
     serverEntries = tempServerEntries;
