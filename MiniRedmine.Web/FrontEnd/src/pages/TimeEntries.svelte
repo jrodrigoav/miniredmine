@@ -1,54 +1,59 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import indexOf from "lodash/indexOf";
-  import filter from "lodash/filter";
-  import sortBy from "lodash/sortBy";
-  import addDays from "date-fns/addDays";
-  import format from "date-fns/format";
-  import startOfMonth from "date-fns/startOfMonth";
-  import endOfMonth from "date-fns/endOfMonth";
-  import { user } from "../stores/userstore";
-  import { issues } from "../stores/issuestore";
-  import { templates } from "../stores/templatestore";
-  import { activities } from "../stores/activitystore";
-  import type INewTimeEntry from "../interfaces/INewTimeEntry";
-  import type ITimeEntry from "../interfaces/ITimeEntry";
-  import type ITurno from "../interfaces/ITurno";
-  import type IModalData from "../interfaces/IModalData";
-  import type ITemplate from "../interfaces/ITemplate";
-  import type IServerTimeEntry from "../interfaces/IServerTimeEntry";
+	import { onMount } from "svelte";
+	import indexOf from "lodash/indexOf";
+	import filter from "lodash/filter";
+	import sortBy from "lodash/sortBy";
+	import addDays from "date-fns/addDays";
+	import format from "date-fns/format";
+	import startOfMonth from "date-fns/startOfMonth";
+	import endOfMonth from "date-fns/endOfMonth";
+	import { user } from "../stores/userstore";
+	import { issues } from "../stores/issuestore";
+	import { templates } from "../stores/templatestore";
+	import { activities } from "../stores/activitystore";
+	import type INewTimeEntry from "../interfaces/INewTimeEntry";
+	import type ITimeEntry from "../interfaces/ITimeEntry";
+	import type ITurno from "../interfaces/ITurno";
+	import type IModalData from "../interfaces/IModalData";
+	import type ITemplate from "../interfaces/ITemplate";
+	import type IServerTimeEntry from "../interfaces/IServerTimeEntry";
 
-  const holidays = [
-    "2022-01-01",
-    "2022-01-17",
-    "2022-02-14",
-    "2022-05-30"
-  ];
-  let quincena: ITurno[] = [];
-  let serverEntries: IServerTimeEntry[];
-  let displayEntries: ITimeEntry[];
-  let displayWeekends = false;
-  let modalWarning: boolean;
-  $: modalWarning = false;
-  $: displayEntries = [];
-  let modalData: IModalData;
-  $: modalData = { turno: {} as ITurno, entries: [] };
+	const holidays = [
+	"2022-01-01",
+	"2022-01-17",
+	"2022-02-21",
+	"2022-05-30",
+	"2022-07-04",
+	"2022-09-05",
+	"2022-10-10",
+	"2022-11-11",
+	"2022-11-24"
+	];
+	let quincena: ITurno[] = [];
+	let serverEntries: IServerTimeEntry[];
+	let displayEntries: ITimeEntry[];
+	let displayWeekends = false;
+	let modalWarning: boolean;
+	$: modalWarning = false;
+	$: displayEntries = [];
+	let modalData: IModalData;
+	$: modalData = { turno: {} as ITurno, entries: [] };
 
-  onMount(async () => {
-    const now = new Date();
+	onMount(async () => {
+	const now = new Date();
 
-    let from: Date;
-    let to: Date;
+	let from: Date;
+	let to: Date;
 
-    if (now.getDate() > 15) {
-      from = new Date(now.getFullYear(), now.getMonth(), 16);
-      to = endOfMonth(now);
-    } else {
-      from = startOfMonth(now);
-      to = new Date(now.getFullYear(), now.getMonth(), 15);
-    }
+	if (now.getDate() > 15) {
+	from = new Date(now.getFullYear(), now.getMonth(), 16);
+	to = endOfMonth(now);
+	} else {
+	from = startOfMonth(now);
+	to = new Date(now.getFullYear(), now.getMonth(), 15);
+	}
 
-    while (from <= to) {
+	while (from <= to) {
       const turno: ITurno = {
         fecha: format(from, "yyyy-MM-dd"),
         dia: from.getDay(),
