@@ -25,7 +25,7 @@ jobs:
   build-front:
     strategy:
       matrix:
-        node-version: [14.x]    
+        node-version: [16.x]    
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2        
