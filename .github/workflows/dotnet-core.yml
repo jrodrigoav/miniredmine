@@ -10,9 +10,9 @@ jobs:
   build-net:
     runs-on: ubuntu-latest   
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 7.0.100
     - name: Install dependencies
@@ -23,12 +23,12 @@ jobs:
   build-front:
     strategy:
       matrix:
-        node-version: [16.x]    
+        node-version: [18.x]    
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2        
+      - uses: actions/checkout@v3       
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3.5.1
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install NPM packages        
@@ -37,3 +37,5 @@ jobs:
       - name: Publish frontend        
         run: npm run publish --if-present
         working-directory: ./MiniRedmine.Web/FrontEnd
+        
+        
