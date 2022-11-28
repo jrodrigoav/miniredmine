@@ -15,7 +15,6 @@ namespace MiniRedmine.Web
             .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
             .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
             .Enrich.FromLogContext()
-            //.WriteTo.File("Logs\\Miniredmine.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 3)
             .WriteTo.Console()
             .CreateLogger();
 
@@ -40,8 +39,12 @@ namespace MiniRedmine.Web
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>()
-                    .UseSerilog();
+                    webBuilder.UseStartup<Startup>();
+                }).UseSerilog((hostContext, services, configuration) => {
+                    configuration.Enrich.FromLogContext()
+                    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                    .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+                    .WriteTo.Console();
                 });
     }
 }

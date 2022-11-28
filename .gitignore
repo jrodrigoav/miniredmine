@@ -12,6 +12,8 @@
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
+MiniRedmine.Web/FrontEnd/package-lock.json
+MiniRedmine.Web/wwwroot/
 
 # Build results
 [Dd]ebug/
