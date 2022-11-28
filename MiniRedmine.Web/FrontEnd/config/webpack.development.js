@@ -32,7 +32,7 @@ module.exports = {
                             /* options */
                         })
                     }
-                }                
+                }
             },
             {
                 test: /.*\.(gif|png|jp(e*)g|svg)$/i,
@@ -41,7 +41,7 @@ module.exports = {
                         loader: "url-loader",
                         options: {
                             limit: 21000,
-                            name: "images/[name]_[hash:7].[ext]"
+                            name: "images/[name]_[contenthash].[ext]"
                         }
                     }
                 ]
@@ -59,12 +59,12 @@ module.exports = {
         usedExports: true,
     },
     output: {
-        filename: 'js/[name].js?t=[hash:8]',
+        filename: 'js/[name].js?t=[contenthash]',
         path: distDirectory
     },
-    plugins: [        
+    plugins: [
         new MiniCssExtractPlugin({
-            filename: "[name].css?t=[hash:8]"
+            filename: "[name].css?t=[contenthash]"
         }),
         new CopyWebpackPlugin({
             patterns: [{

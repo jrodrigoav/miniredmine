@@ -1,4 +1,4 @@
-﻿<script lang="typescript">
+﻿<script lang="ts">
   import { onMount } from "svelte";
   import Header from "./components/Header.svelte";
   import Index from "./pages/Index.svelte";

@@ -1,6 +1,6 @@
-﻿<script lang="typescript">
+﻿<script lang="ts">
   import { user } from "../stores/userstore";
-  export let handleNavigation: Function; 
+  export let handleNavigation: Function;
   export let isLead:boolean;
 </script>
 
@@ -66,7 +66,7 @@
                 on:click={(e) => handleNavigation(e, "/tle/teammembers")}
                 >Team Members</a
               >
-            </li>       
+            </li>
             {/if}
           </ul>
         </li>
