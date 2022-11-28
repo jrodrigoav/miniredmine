@@ -14,6 +14,7 @@
 *.userprefs
 MiniRedmine.Web/FrontEnd/package-lock.json
 MiniRedmine.Web/wwwroot/
+Publish/
 
 # Build results
 [Dd]ebug/

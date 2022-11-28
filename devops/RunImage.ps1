@@ -1,0 +1,1 @@
+docker run --detach -p 62474:80 jrodrigoav/miniredmine:2.4.0
