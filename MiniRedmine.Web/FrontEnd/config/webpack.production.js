@@ -19,7 +19,7 @@ module.exports = {
         main: miniredmine2Entry
     },
     output: {
-        filename: 'js/[name].js?t=[hash:8]',
+        filename: 'js/[name].js?t=[contenthash]',
         path: distDirectory
     },
     resolve: {
@@ -56,7 +56,7 @@ module.exports = {
                         loader: "url-loader",
                         options: {
                             limit: 21000,
-                            name: "images/[name]_[hash:7].[ext]"
+                            name: "images/[name]_[contenthash].[ext]"
                         }
                     }
                 ]
@@ -75,7 +75,7 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin(),
         new MiniCssExtractPlugin({
-            filename: "css/[name].css?t=[hash:8]"
+            filename: "css/[name].css?t=[contenthash]"
         }),
         new CopyWebpackPlugin({
             patterns: [{
@@ -89,7 +89,7 @@ module.exports = {
     ],
     optimization: {
         runtimeChunk: {
-            name: entrypoint => `runtime~${entrypoint.name}`
+            name: entrypoint => `runtime-${entrypoint.name}`
         },
         minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
         splitChunks: {

@@ -10,40 +10,32 @@ jobs:
   build-net:
     runs-on: ubuntu-latest   
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.101
+        dotnet-version: 7.0.100
     - name: Install dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --configuration Release --no-restore
-    - name: Test
-      run: dotnet test --no-restore --verbosity normal      
     
   build-front:
     strategy:
       matrix:
-        node-version: [16.x]    
+        node-version: [18.x]    
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2        
+      - uses: actions/checkout@v3       
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3.5.1
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install NPM packages        
-        run: npm install
+        run: npm install --force --no-package-lock
         working-directory: ./MiniRedmine.Web/FrontEnd
       - name: Publish frontend        
         run: npm run publish --if-present
         working-directory: ./MiniRedmine.Web/FrontEnd
         
-#  publish-package:
-#    runs-on: ubuntu-latest    
-#    needs: [build-net,build-front]
-#    steps:      
-#      - name: Publish Artifact
-#        run: dotnet publish --configuration Release --no-restore --output /Artifact
-#        working-directory: ./MiniRedmine.Web
+        
