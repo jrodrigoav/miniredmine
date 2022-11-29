@@ -1,5 +1,11 @@
 # MiniRedmine by Crococorn Industries is now provided as a docker image
 
+# Currently hosted on
+
+https://miniredmine.onrender.com
+
+Never forget Heroku free dynos :(
+
 ## Current Versions:
 - .NET 7
 - Svelte 3.53.1
