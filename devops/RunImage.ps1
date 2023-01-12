@@ -1,1 +1,1 @@
-docker run --detach -p 62474:80 jrodrigoav/miniredmine:2.4.0
+docker run --detach --publish 62474:80 --env ASPNETCORE_ENVIRONMENT="Production" jrodrigoav/miniredmine:2.4.1

@@ -19,8 +19,8 @@
 	import type IServerTimeEntry from "../interfaces/IServerTimeEntry";
 
 	const holidays = [
-	"2022-12-24",
-	"2023-01-01"
+	"2023-12-25",
+	"2024-01-01"
 	];
 	let quincena: ITurno[] = [];
 	let serverEntries: IServerTimeEntry[];
