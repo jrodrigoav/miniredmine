@@ -1,4 +1,6 @@
-﻿using MiniRedmine.Web.Models.Redmine;
+﻿using Microsoft.Extensions.Options;
+using MiniRedmine.Web.Models;
+using MiniRedmine.Web.Models.Redmine;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -10,11 +12,14 @@ namespace MiniRedmine.Web.Services
     public class RedmineHttpService
     {
         private const string REDMINE_AUTH_HEADER = "X-Redmine-API-Key";
+        private readonly UnosquareSettings _settings;
         private readonly HttpClient _httpClient;
 
-        public RedmineHttpService(HttpClient httpClient)
+        public RedmineHttpService(HttpClient httpClient,IOptionsMonitor<UnosquareSettings> optionsMonitor)
         {
+            _settings = optionsMonitor.CurrentValue;
             _httpClient = httpClient;
+            _httpClient.BaseAddress = new System.Uri(_settings.RedmineUrl, System.UriKind.Absolute);
         }
 
         public async Task<CurrentUser> GetCurrentUserAsync(string userApiKey)
