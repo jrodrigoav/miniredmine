@@ -26,7 +26,7 @@ namespace MiniRedmine.Web
             services.AddHttpClient<RedmineHttpService>();
             services.AddControllers();
             services.AddSpaStaticFiles(configure => configure.RootPath = "wwwroot");
-            
+
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(
@@ -46,7 +46,12 @@ namespace MiniRedmine.Web
             app.UseExceptionHandler("/api/Error/500");
             app.UseStatusCodePagesWithReExecute("/api/Error/{0}");
             if (!environment.IsDevelopment())
-            {                
+            {
+                app.Use(async (context, next) =>
+                {
+                    context.Response.Headers.Add("Content-Security-Policy-Report-Only", "default-src 'self'; script-src 'report-sample' 'self' https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js https://kit.fontawesome.com/2f00ba8004.js; style-src 'report-sample' 'self' https://cdn.jsdelivr.net; object-src 'none'; base-uri 'self'; connect-src 'self' https://ka-f.fontawesome.com; font-src 'self' https://ka-f.fontawesome.com; frame-src 'self'; img-src 'self'; manifest-src 'self'; media-src 'self'; report-uri https://jrodrigoav.report-uri.com/r/d/csp/reportOnly; worker-src 'none';");
+                    await next();
+                });
                 app.UseHsts();
             }
             app.UseSerilogRequestLogging();
@@ -67,7 +72,7 @@ namespace MiniRedmine.Web
             });
 
             app.UseRouting();
-            app.UseCors();            
+            app.UseCors();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
             app.UseSpa(options => options.Options.DefaultPage = new Microsoft.AspNetCore.Http.PathString("/index.html"));
         }
