@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using MiniRedmine.Web.Models;
 using MiniRedmine.Web.Services;
 using Serilog;
@@ -21,7 +23,7 @@ namespace MiniRedmine.Web
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddHttpClient<RedmineHttpService>(configureClient => configureClient.BaseAddress = new System.Uri("https://dev.unosquare.com/redmine/"));
+            services.AddHttpClient<RedmineHttpService>();
             services.AddControllers();
             services.AddSpaStaticFiles(configure => configure.RootPath = "wwwroot");
             
@@ -35,15 +37,18 @@ namespace MiniRedmine.Web
                     });
             });
 
-            services.Configure<UnosquareSettings>(Configuration.GetSection("UNOSQUARE"));
+            services.Configure<UnosquareSettings>(Configuration.GetSection("Unosquare"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app,IWebHostEnvironment environment)
         {
             app.UseExceptionHandler("/api/Error/500");
             app.UseStatusCodePagesWithReExecute("/api/Error/{0}");
-
+            if (!environment.IsDevelopment())
+            {                
+                app.UseHsts();
+            }
             app.UseSerilogRequestLogging();
 
             app.UseDefaultFiles(new DefaultFilesOptions

@@ -94,5 +94,5 @@
   <Index />
 {/if}
 <footer>
-  Copyright &copy; Jesus Acedo 2018 - 2023 version: 2.4.1
+  Copyright &copy; Jesus Acedo 2018 - 2023 version: 2.4.2
 </footer>
