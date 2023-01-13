@@ -26,7 +26,7 @@ namespace MiniRedmine.Web
             services.AddHttpClient<RedmineHttpService>();
             services.AddControllers();
             services.AddSpaStaticFiles(configure => configure.RootPath = "wwwroot");
-            
+
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(
@@ -72,7 +72,7 @@ namespace MiniRedmine.Web
             });
 
             app.UseRouting();
-            app.UseCors();            
+            app.UseCors();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
             app.UseSpa(options => options.Options.DefaultPage = new Microsoft.AspNetCore.Http.PathString("/index.html"));
         }
