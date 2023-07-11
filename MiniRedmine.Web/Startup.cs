@@ -33,7 +33,7 @@ namespace MiniRedmine.Web
                     builder =>
                     {
                         builder.WithOrigins("http://localhost",
-                                            "https://miniremine.herokuapp.com");
+                                            "https://miniredmine.onrender.com");
                     });
             });
 

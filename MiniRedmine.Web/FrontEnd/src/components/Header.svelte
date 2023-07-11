@@ -1,7 +1,6 @@
 ﻿<script lang="ts">
   import { user } from "../stores/userstore";
   export let handleNavigation: Function;
-  export let isLead:boolean;
 </script>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-3">
@@ -58,16 +57,6 @@
                 >Templates</a
               >
             </li>
-            {#if isLead === true}
-            <li>
-              <a
-                class="dropdown-item"
-                href="/tle/teammembers"
-                on:click={(e) => handleNavigation(e, "/tle/teammembers")}
-                >Team Members</a
-              >
-            </li>
-            {/if}
           </ul>
         </li>
         <li class="nav-item">
@@ -86,15 +75,6 @@
             on:click={(e) => handleNavigation(e, "/user/report")}
           >
             Report
-          </a>
-        </li>
-        <li class="nav-item">
-          <a
-            class="nav-link"
-            href="/tle/report"
-            on:click={(e) => handleNavigation(e, "/tle/report")}
-          >
-            TLE Report
           </a>
         </li>
       {/if}

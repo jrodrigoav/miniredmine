@@ -74,44 +74,7 @@ namespace MiniRedmine.Web.Controllers
                 SpentOn = newTimeEntry.SpentOn
             };
             return Created("", timeEntry);*/
-        }
-
-        [HttpGet("leads")]
-        public IActionResult GetLeads([FromServices] IOptionsMonitor<UnosquareSettings> optionsMonitor) => Ok(optionsMonitor.CurrentValue.LeadIds);
-
-        [HttpPost("teamtimeentries")]
-        public async Task<IActionResult> GetTimeTimeEntries([FromHeader(Name = "Redmine-Key")] string userApiKey, [FromForm] GetTeamTimeEntriesViewModel model, [FromServices] IOptionsMonitor<UnosquareSettings> optionsMonitor)
-        {
-            if (string.IsNullOrWhiteSpace(userApiKey)) return BadRequest(new { Message = "Try again" });
-            if (model.TeamMembers.Length == 0) return BadRequest(new { Message = "Try again" });
-            var currentUser = await _redmineHttpService.GetCurrentUserAsync(userApiKey);
-            if (optionsMonitor.CurrentValue.LeadIds.Contains(currentUser.Id))
-            {
-                var teamIds = model.TeamMembers.Append(currentUser.Id);
-                var entries = new List<TimeEntry>();
-                foreach (var userId in teamIds)
-                {
-                    var userEntries = await _redmineHttpService.GetTimeEntriesAsync(userApiKey, userId, model.From, model.To);
-                    if (userEntries?.Any() == true)
-                    {
-                        entries.AddRange(userEntries);
-                    }
-                }
-                var projects = entries.Select(s => s.Project.Id).Distinct();
-                var result = new System.Collections.Concurrent.ConcurrentBag<TeamEntriesReport>();
-                Parallel.ForEach(projects, p =>
-                {
-                    var proj = entries.First(r => r.Project.Id == p);
-
-                    var memberEntries = entries.Where(k => k.Project.Id == p).GroupBy(j => j.Issue.Id).Select(r => new MemberHours { IssueId = r.Key, Issue = r.First().Issue.Name, Name = r.First().User.Name, Hours = r.Sum(h => h.Hours) });
-                    var report = new TeamEntriesReport { Project = proj.Project.Name, ProjectId = p, MemberHours = memberEntries };
-                    result.Add(report);
-                });
-                return Ok(result.ToList());
-            }
-
-            return Forbid();
-        }
+        }        
 
     }
 }
