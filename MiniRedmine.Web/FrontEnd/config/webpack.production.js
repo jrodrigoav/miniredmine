@@ -24,10 +24,11 @@ module.exports = {
     },
     resolve: {
         alias: {
-            svelte: path.resolve('node_modules', 'svelte')
+            svelte: path.resolve('node_modules', 'svelte/src/runtime')
         },
         extensions: ['.mjs', '.js', '.ts', '.tsx', '.svelte'],
-        mainFields: ['svelte', 'browser', 'module', 'main']
+        mainFields: ['svelte', 'browser', 'module', 'main'],
+        conditionNames: ['svelte', 'browser', 'script']
     },
     module: {
         rules: [
