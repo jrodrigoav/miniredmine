@@ -1,2 +1,4 @@
-$redmineurl=Read-Host -Promt "Redmine URL";
-docker run --detach --publish 62474:80 --env Unosquare__RedmineUrl=$redmineurl --env ASPNETCORE_ENVIRONMENT="Development" jrodrigoav/miniredmine:2.5.1
+$redmineurl=Read-Host -Prompt "Redmine URL";
+docker container stop miniredmine;
+docker container rm miniredmine;
+docker run --detach --publish 62474:80 --env Unosquare__RedmineUrl=$redmineurl --env ASPNETCORE_ENVIRONMENT="Development" --name miniredmine jrodrigoav/miniredmine:2.6.0
