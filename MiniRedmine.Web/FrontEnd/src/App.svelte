@@ -73,5 +73,5 @@
   <Index />
 {/if}
 <footer>
-  Copyright &copy; Jesus Acedo 2018 - 2023 version: 2.6.0
+  Copyright &copy; Jesus Acedo 2018 - 2023 version: 2.6.1
 </footer>
