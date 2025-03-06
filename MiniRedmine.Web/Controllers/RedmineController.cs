@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using MiniRedmine.Web.Models;
 using MiniRedmine.Web.Models.Redmine;
 using MiniRedmine.Web.Services;
 using MiniRedmine.Web.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MiniRedmine.Web.Controllers
@@ -31,10 +27,18 @@ namespace MiniRedmine.Web.Controllers
         }
 
         [HttpGet("issue/{issueId}")]
-        public async Task<IActionResult> GetIssueAsync([FromRoute, Range(0, 999999)] int issueId, [FromHeader(Name = "Redmine-Key")] string userApiKey)
+        public async Task<IActionResult> GetIssueAsync([FromRoute, Range(0, 9999999)] int issueId, [FromHeader(Name = "Redmine-Key")] string userApiKey)
         {
             if (string.IsNullOrWhiteSpace(userApiKey)) return BadRequest(new { Message = "Try again" });
             var result = await _redmineHttpService.GetIssueAsync(userApiKey, issueId);
+            return Ok(result);
+        }
+
+        [HttpGet("project/{projectId}")]
+        public async Task<IActionResult> GetProjectAsync([FromRoute, Range(0, 9999999)] int projectId, [FromHeader(Name = "Redmine-Key")] string userApiKey)
+        {
+            if (string.IsNullOrWhiteSpace(userApiKey)) return BadRequest(new { Message = "Try again" });
+            var result = await _redmineHttpService.GetProjectAsync(userApiKey, projectId);
             return Ok(result);
         }
 
@@ -58,11 +62,11 @@ namespace MiniRedmine.Web.Controllers
             return Ok(result);
         }
 
-        [HttpPost("timeentries")]
-        public async Task<IActionResult> CreateTimeEntriesAsync([FromHeader(Name = "Redmine-Key")] string userApiKey, [FromBody] CreateTimeEntryViewModel newTimeEntry)
+        [HttpPost("issue/timeentries")]
+        public async Task<IActionResult> CreateIssueTimeEntriesAsync([FromHeader(Name = "Redmine-Key")] string userApiKey, [FromBody] CreateIssueTimeEntryViewModel newTimeEntry)
         {
             await _redmineHttpService.GetCurrentUserAsync(userApiKey);
-            return Created("", await _redmineHttpService.CreateTimeEntriesAsync(userApiKey, newTimeEntry.ConvertToCreateTimeEntry()));
+            return Created("", await _redmineHttpService.CreateIssueTimeEntriesAsync(userApiKey, newTimeEntry));
             /*var timeEntry = new TimeEntry
             {
                 Activity = new Activity { Name = "Created", Id = newTimeEntry.ActivityId },
@@ -74,7 +78,25 @@ namespace MiniRedmine.Web.Controllers
                 SpentOn = newTimeEntry.SpentOn
             };
             return Created("", timeEntry);*/
-        }        
+        }
+
+        [HttpPost("project/timeentries")]
+        public async Task<IActionResult> CreateProjectTimeEntriesAsync([FromHeader(Name = "Redmine-Key")] string userApiKey, [FromBody] CreateProjectTimeEntryViewModel newTimeEntry)
+        {
+            await _redmineHttpService.GetCurrentUserAsync(userApiKey);
+            return Created("", await _redmineHttpService.CreateProjectTimeEntriesAsync(userApiKey, newTimeEntry));
+            /*var timeEntry = new TimeEntry
+            {
+                Activity = new Activity { Name = "Created", Id = newTimeEntry.ActivityId },
+                Id = new Random().Next(99990000, 99999999),
+                Comments = newTimeEntry.Comments,
+                Hours = newTimeEntry.Hours,
+                Issue = null,
+                Project = new IdNameBase { Name = "Test Project", Id = 1 },
+                SpentOn = newTimeEntry.SpentOn
+            };
+            return Created("", timeEntry);*/
+        }
 
     }
 }
