@@ -267,6 +267,7 @@ FakesAssemblies/
 # Node.js Tools for Visual Studio
 .ntvs_analysis.dat
 node_modules/
+.parcel-cache/
 
 # Visual Studio 6 build log
 *.plg
@@ -338,7 +339,7 @@ ASALocalRun/
 .localhistory/
 
 #WWWRoot
-/MiniRedmine.Web/package-lock.json
+package-lock.json
 /MiniRedmine.Web/Properties/launchSettings.json
 /MiniRedmine.Web/_PublishedWebsites/NetCoreWebApp
 /MiniRedmine.Web/Logs

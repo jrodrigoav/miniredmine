@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using MiniRedmine.Web.Models;
 using MiniRedmine.Web.Models.Redmine;
+using MiniRedmine.Web.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -15,7 +16,7 @@ namespace MiniRedmine.Web.Services
         private readonly UnosquareSettings _settings;
         private readonly HttpClient _httpClient;
 
-        public RedmineHttpService(HttpClient httpClient,IOptionsMonitor<UnosquareSettings> optionsMonitor)
+        public RedmineHttpService(HttpClient httpClient, IOptionsMonitor<UnosquareSettings> optionsMonitor)
         {
             _settings = optionsMonitor.CurrentValue;
             _httpClient = httpClient;
@@ -44,6 +45,17 @@ namespace MiniRedmine.Web.Services
             return null;
         }
 
+        public async Task<Project> GetProjectAsync(string userApiKey, int projectId)
+        {
+            if (_httpClient.DefaultRequestHeaders.Contains(REDMINE_AUTH_HEADER) == false)
+            {
+                _httpClient.DefaultRequestHeaders.Add(REDMINE_AUTH_HEADER, userApiKey);
+            }
+            var container = await _httpClient.GetFromJsonAsync<ProjectContainer>($"projects/{projectId}.json");
+            if (container?.Project is Project) return container.Project;
+            return null;
+        }
+
         public async Task<IEnumerable<Activity>> GetTimeEntryActivitiesASync(string userApiKey)
         {
             if (_httpClient.DefaultRequestHeaders.Contains(REDMINE_AUTH_HEADER) == false)
@@ -65,14 +77,11 @@ namespace MiniRedmine.Web.Services
             return container.TimeEntries;
         }
 
-        public Task<TimeEntry> CreateTimeEntriesAsync(string userApiKey, CreateTimeEntry createTimeEntryViewModel)
+        public async Task<TimeEntry> CreateIssueTimeEntriesAsync(string userApiKey, CreateIssueTimeEntryViewModel viewModel)
         {
-            return CreateTimeEntriesAsync(userApiKey, new CreateTimeEntryContainer { TimeEntry = createTimeEntryViewModel });
-        }
-        public async Task<TimeEntry> CreateTimeEntriesAsync(string userApiKey, CreateTimeEntryContainer createTimeEntryContainer)
-        {
+            var payload = new CreateTimeEntryContainer<CreateIssueTimeEntry> { TimeEntry = viewModel.ToTimeEntry() };
             TimeEntry result = null;
-            using (var response = await _httpClient.PostAsJsonAsync<CreateTimeEntryContainer>($"time_entries.json?key={userApiKey}", createTimeEntryContainer))
+            using (var response = await _httpClient.PostAsJsonAsync($"time_entries.json?key={userApiKey}", payload))
             {
                 response.EnsureSuccessStatusCode();
                 var createTimeEntryResult = await response.Content.ReadFromJsonAsync<CreateTimeEntryResult>();
@@ -83,5 +92,22 @@ namespace MiniRedmine.Web.Services
             }
             return result;
         }
+
+        public async Task<TimeEntry> CreateProjectTimeEntriesAsync(string userApiKey, CreateProjectTimeEntryViewModel viewModel)
+        {
+            var payload = new CreateTimeEntryContainer<CreateProjectTimeEntry> { TimeEntry = viewModel.ToTimeEntry() };
+            TimeEntry result = null;
+            using (var response = await _httpClient.PostAsJsonAsync($"time_entries.json?key={userApiKey}", payload))
+            {
+                response.EnsureSuccessStatusCode();
+                var createTimeEntryResult = await response.Content.ReadFromJsonAsync<CreateTimeEntryResult>();
+                if (createTimeEntryResult is CreateTimeEntryResult)
+                {
+                    result = createTimeEntryResult.TimeEntry;
+                }
+            }
+            return result;
+        }
+
     }
 }
